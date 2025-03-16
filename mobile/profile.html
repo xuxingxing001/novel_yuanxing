@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>个人中心 - AI网文小说创作助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="mobile-common.css" rel="stylesheet">
+    <style>
+        /* 个人中心页面特定样式 */
+        .user-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        
+        .user-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            background-color: rgba(79, 70, 229, 0.1);
+            color: #4f46e5;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            margin-right: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+        
+        .menu-icon {
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+            margin-right: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="status-bar-left">
+                <span class="status-bar-time">9:41</span>
+            </div>
+            <div class="status-bar-right">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi ml-2"></i>
+                <i class="fas fa-battery-full ml-2 status-bar-battery"></i>
+            </div>
+        </div>
+        
+        <!-- 导航栏 -->
+        <div class="nav-bar">
+            <div class="nav-left"></div>
+            <div class="nav-title">个人中心</div>
+            <div class="nav-right">
+                <i class="fas fa-cog"></i>
+            </div>
+        </div>
+        
+        <!-- 内容区域 -->
+        <div class="content">
+            <!-- 用户信息 -->
+            <div class="card mb-4">
+                <div class="p-4">
+                    <div class="flex items-center">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=80&q=80" alt="用户头像" class="avatar-lg mr-4">
+                        <div>
+                            <h2 class="text-xl font-bold">李作家</h2>
+                            <p class="text-sm text-secondary">普通会员</p>
+                            <div class="flex flex-wrap items-center mt-2">
+                                <span class="user-tag">都市文学爱好者</span>
+                                <span class="user-tag">创作新手</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-stats">
+                        <div>
+                            <div class="text-xl font-bold">3</div>
+                            <div class="text-xs text-secondary">作品数</div>
+                        </div>
+                        <div>
+                            <div class="text-xl font-bold">12</div>
+                            <div class="text-xs text-secondary">章节数</div>
+                        </div>
+                        <div>
+                            <div class="text-xl font-bold">32,456</div>
+                            <div class="text-xs text-secondary">总字数</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 会员信息 -->
+            <div class="card mb-4">
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-bold">会员信息</h3>
+                        <span class="text-xs text-secondary">普通会员</span>
+                    </div>
+                    <div class="bg-light p-3 rounded-lg mb-3">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm">每日AI创作额度</span>
+                            <span class="text-sm font-bold">1,000字</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-primary h-2 rounded-full" style="width: 30%"></div>
+                        </div>
+                        <div class="flex justify-between items-center mt-1">
+                            <span class="text-xs text-secondary">已使用: 300字</span>
+                            <span class="text-xs text-secondary">剩余: 700字</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary w-full" onclick="showMembershipPlans()">
+                        <i class="fas fa-crown mr-2"></i> 升级会员
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 功能菜单 -->
+            <div class="card mb-4">
+                <ul class="list">
+                    <li class="list-item">
+                        <div class="list-item-content">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-3">
+                                    <i class="fas fa-book"></i>
+                                </div>
+                                <span>我的作品</span>
+                            </div>
+                        </div>
+                        <div class="list-item-right">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </li>
+                    <li class="list-item">
+                        <div class="list-item-content">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-3">
+                                    <i class="fas fa-lightbulb"></i>
+                                </div>
+                                <span>我的灵感</span>
+                            </div>
+                        </div>
+                        <div class="list-item-right">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </li>
+                    <li class="list-item">
+                        <div class="list-item-content">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 mr-3">
+                                    <i class="fas fa-history"></i>
+                                </div>
+                                <span>创作历史</span>
+                            </div>
+                        </div>
+                        <div class="list-item-right">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- 设置菜单 -->
+            <div class="card mb-4">
+                <ul class="list">
+                    <li class="list-item">
+                        <div class="list-item-content">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 mr-3">
+                                    <i class="fas fa-user-edit"></i>
+                                </div>
+                                <span>个人资料</span>
+                            </div>
+                        </div>
+                        <div class="list-item-right">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </li>
+                    <li class="list-item">
+                        <div class="list-item-content">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 mr-3">
+                                    <i class="fas fa-cog"></i>
+                                </div>
+                                <span>偏好设置</span>
+                            </div>
+                        </div>
+                        <div class="list-item-right">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </li>
+                    <li class="list-item">
+                        <div class="list-item-content">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 mr-3">
+                                    <i class="fas fa-bell"></i>
+                                </div>
+                                <span>通知设置</span>
+                            </div>
+                        </div>
+                        <div class="list-item-right">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- 帮助与支持 -->
+            <div class="card mb-4">
+                <ul class="list">
+                    <li class="list-item">
+                        <div class="list-item-content">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 mr-3">
+                                    <i class="fas fa-question-circle"></i>
+                                </div>
+                                <span>帮助中心</span>
+                            </div>
+                        </div>
+                        <div class="list-item-right">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </li>
+                    <li class="list-item">
+                        <div class="list-item-content">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 mr-3">
+                                    <i class="fas fa-comment-alt"></i>
+                                </div>
+                                <span>意见反馈</span>
+                            </div>
+                        </div>
+                        <div class="list-item-right">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </li>
+                    <li class="list-item">
+                        <div class="list-item-content">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 mr-3">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                                <span>关于我们</span>
+                            </div>
+                        </div>
+                        <div class="list-item-right">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- 退出登录 -->
+            <div class="mb-4">
+                <button class="btn btn-outline w-full" onclick="showLogoutConfirm()">
+                    <i class="fas fa-sign-out-alt mr-2"></i> 退出登录
+                </button>
+            </div>
+        </div>
+        
+        <!-- 底部标签栏 -->
+        <div class="tab-bar">
+            <a href="home.html" class="tab-item" data-tab="home">
+                <i class="fas fa-home tab-icon"></i>
+                <span>首页</span>
+            </a>
+            <a href="novel-list.html" class="tab-item" data-tab="novels">
+                <i class="fas fa-book tab-icon"></i>
+                <span>我的小说</span>
+            </a>
+            <a href="create.html" class="tab-item" data-tab="create">
+                <i class="fas fa-plus-circle tab-icon"></i>
+                <span>创作</span>
+            </a>
+            <a href="inspiration.html" class="tab-item" data-tab="inspiration">
+                <i class="fas fa-lightbulb tab-icon"></i>
+                <span>灵感</span>
+            </a>
+            <a href="profile.html" class="tab-item active" data-tab="profile">
+                <i class="fas fa-user tab-icon"></i>
+                <span>我的</span>
+            </a>
+        </div>
+    </div>
+    
+    <!-- 会员方案弹窗 -->
+    <div id="membership-modal" class="modal">
+        <div class="modal-content" style="max-width: 90%; width: 100%;">
+            <div class="modal-header">
+                <h3>会员方案</h3>
+                <button class="text-gray-500" onclick="document.getElementById('membership-modal').classList.remove('show')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="p-4">
+                    <div class="card mb-3 border-2 border-primary">
+                        <div class="p-3">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="font-bold">月度会员</h4>
+                                <span class="text-xl font-bold text-primary">¥29.9</span>
+                            </div>
+                            <p class="text-xs text-secondary mb-2">每月</p>
+                            <ul class="text-sm space-y-1 mb-3">
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-2 text-xs"></i>
+                                    <span>每日10,000字AI创作额度</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-2 text-xs"></i>
+                                    <span>优先使用高级AI模型</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-2 text-xs"></i>
+                                    <span>无广告体验</span>
+                                </li>
+                            </ul>
+                            <button class="btn btn-primary w-full" onclick="subscribeMembership('monthly')">立即订阅</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card mb-3 border-2 border-primary relative">
+                        <div class="absolute top-0 right-0 bg-primary text-white text-xs px-2 py-1 rounded-bl-lg">最受欢迎</div>
+                        <div class="p-3">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="font-bold">季度会员</h4>
+                                <span class="text-xl font-bold text-primary">¥79.9</span>
+                            </div>
+                            <p class="text-xs text-secondary mb-2">每三个月</p>
+                            <ul class="text-sm space-y-1 mb-3">
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-2 text-xs"></i>
+                                    <span>每日30,000字AI创作额度</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-2 text-xs"></i>
+                                    <span>优先使用高级AI模型</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-2 text-xs"></i>
+                                    <span>无广告体验</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-2 text-xs"></i>
+                                    <span>专属客服支持</span>
+                                </li>
+                            </ul>
+                            <button class="btn btn-primary w-full" onclick="subscribeMembership('quarterly')">立即订阅</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card mb-3">
+                        <div class="p-3">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="font-bold">年度会员</h4>
+                                <span class="text-xl font-bold text-primary">¥299.9</span>
+                            </div>
+                            <p class="text-xs text-secondary mb-2">每年</p>
+                            <ul class="text-sm space-y-1 mb-3">
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-2 text-xs"></i>
+                                    <span>每日无限AI创作额度</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-2 text-xs"></i>
+                                    <span>优先使用高级AI模型</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-2 text-xs"></i>
+                                    <span>无广告体验</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-2 text-xs"></i>
+                                    <span>专属客服支持</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-2 text-xs"></i>
+                                    <span>专属定制模型</span>
+                                </li>
+                            </ul>
+                            <button class="btn btn-primary w-full" onclick="subscribeMembership('annual')">立即订阅</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="mobile-common.js"></script>
+    <script>
+        // 显示会员方案弹窗
+        function showMembershipPlans() {
+            const modal = document.getElementById('membership-modal');
+            modal.classList.add('show');
+        }
+        
+        // 订阅会员
+        function subscribeMembership(plan) {
+            // 关闭会员方案弹窗
+            document.getElementById('membership-modal').classList.remove('show');
+            
+            // 显示支付确认
+            showConfirm('确认订阅', `您确定要订阅${plan === 'monthly' ? '月度' : plan === 'quarterly' ? '季度' : '年度'}会员吗？`, '确认支付', '取消')
+                .then(result => {
+                    if (result) {
+                        // 模拟支付成功
+                        setTimeout(() => {
+                            showToast('订阅成功！感谢您的支持', 'success');
+                        }, 1000);
+                    }
+                });
+        }
+        
+        // 显示退出登录确认
+        function showLogoutConfirm() {
+            showConfirm('退出登录', '确定要退出登录吗？', '确定', '取消')
+                .then(result => {
+                    if (result) {
+                        showToast('已退出登录', 'info');
+                        setTimeout(() => {
+                            window.location.href = 'home.html';
+                        }, 1500);
+                    }
+                });
+        }
+    </script>
+</body>
+</html> 

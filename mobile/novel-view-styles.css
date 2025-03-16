@@ -1,0 +1,249 @@
+/* 小说阅读页面专用样式 */
+
+/* 阅读区域 */
+.reading-area {
+    padding: 1rem;
+    background-color: #fff;
+    min-height: calc(100vh - 12rem);
+    transition: all 0.3s ease;
+}
+
+/* 阅读设置面板 */
+.reading-settings {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    border-top: 1px solid #e5e7eb;
+    padding: 1rem;
+    z-index: 50;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.reading-settings.active {
+    transform: translateY(0);
+}
+
+/* 阅读设置选项 */
+.settings-option {
+    margin-bottom: 1rem;
+}
+
+.settings-option-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.settings-option-title i {
+    margin-right: 0.5rem;
+    color: #4b5563;
+}
+
+.settings-option-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.settings-item {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.settings-item:hover {
+    border-color: #3b82f6;
+}
+
+.settings-item.active {
+    background-color: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+}
+
+/* 章节标题 */
+.chapter-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+/* 章节内容 */
+.chapter-content {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #1f2937;
+    text-align: justify;
+}
+
+.chapter-content p {
+    margin-bottom: 1rem;
+    text-indent: 2em;
+}
+
+/* 章节导航 */
+.chapter-nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    border-top: 1px solid #e5e7eb;
+    background-color: #fff;
+}
+
+.chapter-nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+}
+
+.chapter-nav-btn:hover {
+    border-color: #3b82f6;
+    color: #3b82f6;
+}
+
+.chapter-nav-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.chapter-nav-btn i {
+    margin-right: 0.5rem;
+}
+
+.chapter-nav-btn:last-child i {
+    margin-right: 0;
+    margin-left: 0.5rem;
+}
+
+/* 章节列表 */
+.chapter-list-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 80%;
+    max-width: 20rem;
+    background-color: #fff;
+    z-index: 60;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.chapter-list-panel.active {
+    transform: translateX(0);
+}
+
+.chapter-list-header {
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chapter-list-title {
+    font-weight: 600;
+}
+
+.chapter-list-close {
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #f3f4f6;
+}
+
+.chapter-list-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.5rem 0;
+}
+
+.chapter-list-item {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+.chapter-list-item.active {
+    background-color: #f3f4f6;
+    color: #3b82f6;
+    font-weight: 600;
+}
+
+/* 遮罩层 */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 40;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* 字体大小 */
+.font-size-small {
+    font-size: 0.875rem;
+}
+
+.font-size-medium {
+    font-size: 1rem;
+}
+
+.font-size-large {
+    font-size: 1.125rem;
+}
+
+.font-size-xlarge {
+    font-size: 1.25rem;
+}
+
+/* 背景颜色 */
+.bg-white {
+    background-color: #ffffff;
+    color: #1f2937;
+}
+
+.bg-sepia {
+    background-color: #f8f3e8;
+    color: #5c4b35;
+}
+
+.bg-dark {
+    background-color: #1f2937;
+    color: #e5e7eb;
+}
+
+.bg-black {
+    background-color: #111827;
+    color: #d1d5db;
+} 

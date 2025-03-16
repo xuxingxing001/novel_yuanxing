@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页 - AI网文小说创作助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="mobile-common.css" rel="stylesheet">
+</head>
+<body>
+    <div class="mobile-container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="status-bar-left">
+                <span class="status-bar-time">9:41</span>
+            </div>
+            <div class="status-bar-right">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi ml-2"></i>
+                <i class="fas fa-battery-full ml-2 status-bar-battery"></i>
+            </div>
+        </div>
+        
+        <!-- 导航栏 -->
+        <div class="nav-bar">
+            <div class="nav-left"></div>
+            <div class="nav-title">AI网文小说创作助手</div>
+            <div class="nav-right">
+                <i class="fas fa-bell"></i>
+            </div>
+        </div>
+        
+        <!-- 内容区域 -->
+        <div class="content">
+            <!-- 欢迎卡片 -->
+            <div class="card mb-4">
+                <div class="card-body p-4">
+                    <div class="flex items-center mb-3">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=80&q=80" alt="用户头像" class="avatar mr-3">
+                        <div>
+                            <h3 class="font-bold">欢迎回来，李作家</h3>
+                            <p class="text-sm text-secondary">今天是创作的好日子</p>
+                        </div>
+                    </div>
+                    <div class="bg-light p-3 rounded-lg">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-semibold">本月创作统计</span>
+                            <a href="#" class="text-primary text-sm">查看详情</a>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 text-center">
+                            <div>
+                                <div class="text-xl font-bold">3</div>
+                                <div class="text-xs text-secondary">作品数</div>
+                            </div>
+                            <div>
+                                <div class="text-xl font-bold">12</div>
+                                <div class="text-xs text-secondary">章节数</div>
+                            </div>
+                            <div>
+                                <div class="text-xl font-bold">32,456</div>
+                                <div class="text-xs text-secondary">总字数</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 快速操作 -->
+            <div class="mb-4">
+                <h2 class="text-lg font-bold mb-3">快速操作</h2>
+                <div class="grid grid-cols-2 gap-3">
+                    <a href="create.html" class="card p-4 flex flex-col items-center justify-center text-center">
+                        <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white mb-2">
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <span class="font-semibold">创建新小说</span>
+                        <p class="text-xs text-secondary mt-1">从零开始创作</p>
+                    </a>
+                    <a href="novel-list.html" class="card p-4 flex flex-col items-center justify-center text-center">
+                        <div class="w-12 h-12 rounded-full bg-info flex items-center justify-center text-white mb-2">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <span class="font-semibold">我的小说</span>
+                        <p class="text-xs text-secondary mt-1">继续创作</p>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- 最近作品 -->
+            <div class="mb-4">
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="text-lg font-bold">最近作品</h2>
+                    <a href="novel-list.html" class="text-primary text-sm">查看全部</a>
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="flex p-4">
+                        <div class="w-16 h-20 bg-cover bg-center rounded mr-3" style="background-image: url('https://images.unsplash.com/photo-1518826778770-a729fb53c3c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80')"></div>
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start">
+                                <h3 class="font-bold">情感读心者</h3>
+                                <span class="badge badge-primary">连载中</span>
+                            </div>
+                            <div class="text-xs text-secondary mb-2">都市异能 | 32,456字 | 8/30章</div>
+                            <p class="text-sm mb-2 line-clamp-2">大学生李天阳在一次偶然的机会下获得了一个神秘的系统，可以看到他人的情感值。</p>
+                            <div class="flex justify-between">
+                                <span class="text-xs text-secondary">3天前更新</span>
+                                <div>
+                                    <a href="novel-edit.html" class="btn btn-sm btn-outline">
+                                        <i class="fas fa-edit mr-1"></i> 继续创作
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="flex p-4">
+                        <div class="w-16 h-20 bg-cover bg-center rounded mr-3" style="background-image: url('https://images.unsplash.com/photo-1511300636408-a63a89df3482?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80')"></div>
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start">
+                                <h3 class="font-bold">修真归来</h3>
+                                <span class="badge badge-success">已完结</span>
+                            </div>
+                            <div class="text-xs text-secondary mb-2">都市修真 | 128,765字 | 30/30章</div>
+                            <p class="text-sm mb-2 line-clamp-2">叶辰在修真界修炼千年，因一场大战意外跌落凡间，重回都市。</p>
+                            <div class="flex justify-between">
+                                <span class="text-xs text-secondary">1个月前更新</span>
+                                <div>
+                                    <a href="novel-view.html" class="btn btn-sm btn-outline">
+                                        <i class="fas fa-book-open mr-1"></i> 阅读
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI创作灵感 -->
+            <div class="mb-4">
+                <h2 class="text-lg font-bold mb-3">今日创作灵感</h2>
+                <div class="card p-4">
+                    <p class="text-sm mb-3">「一个普通上班族在加班的夜晚收到一条神秘短信，短信内容预言了第二天会发生的事情，而这一切竟然真的发生了...」</p>
+                    <div class="flex justify-between">
+                        <span class="text-xs text-secondary">都市奇幻</span>
+                        <button class="btn btn-sm btn-primary" onclick="showToast('已为您保存灵感', 'success')">
+                            <i class="fas fa-lightbulb mr-1"></i> 保存灵感
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 会员推广 -->
+            <div class="card bg-primary text-white overflow-hidden mb-4">
+                <div class="p-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">开通会员</h3>
+                            <p class="text-sm mb-3">解锁高级AI模型，享受无限创作额度</p>
+                            <button class="btn bg-white text-primary font-semibold">
+                                立即开通
+                            </button>
+                        </div>
+                        <div class="text-4xl opacity-50">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部标签栏 -->
+        <div class="tab-bar">
+            <a href="home.html" class="tab-item active" data-tab="home">
+                <i class="fas fa-home tab-icon"></i>
+                <span>首页</span>
+            </a>
+            <a href="novel-list.html" class="tab-item" data-tab="novels">
+                <i class="fas fa-book tab-icon"></i>
+                <span>我的小说</span>
+            </a>
+            <a href="create.html" class="tab-item" data-tab="create">
+                <i class="fas fa-plus-circle tab-icon"></i>
+                <span>创作</span>
+            </a>
+            <a href="inspiration.html" class="tab-item" data-tab="inspiration">
+                <i class="fas fa-lightbulb tab-icon"></i>
+                <span>灵感</span>
+            </a>
+            <a href="profile.html" class="tab-item" data-tab="profile">
+                <i class="fas fa-user tab-icon"></i>
+                <span>我的</span>
+            </a>
+        </div>
+    </div>
+    
+    <script src="mobile-common.js"></script>
+    <style>
+        /* 额外样式 */
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+</body>
+</html> 

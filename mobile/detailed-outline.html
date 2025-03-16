@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>章节细纲 - AI网文小说创作助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="mobile-common.css" rel="stylesheet">
+    <link href="detailed-outline-styles.css" rel="stylesheet">
+    <style>
+        /* 滚动式步骤条样式 */
+        .steps-scroller-container {
+            position: relative;
+            overflow: hidden;
+            margin: 1rem 0;
+            padding: 0 1.5rem;
+        }
+        
+        .steps-scroller {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding: 0.5rem 0;
+        }
+        
+        .steps-scroller::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .step-item {
+            flex: 0 0 auto;
+            width: 80px;
+            scroll-snap-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 0.25rem;
+        }
+        
+        .step-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+            position: relative;
+            background-color: #e5e7eb;
+            color: #6b7280;
+        }
+        
+        .step-circle.completed {
+            background-color: #10b981;
+            color: white;
+        }
+        
+        .step-circle.active {
+            background-color: #6366f1;
+            color: white;
+        }
+        
+        .step-label {
+            font-size: 0.7rem;
+            text-align: center;
+            color: #6b7280;
+            max-width: 100%;
+            white-space: normal;
+            line-height: 1.2;
+        }
+        
+        .step-item.completed .step-label,
+        .step-item.active .step-label {
+            color: #374151;
+            font-weight: 600;
+        }
+        
+        .step-connector {
+            position: absolute;
+            top: 25px;
+            left: 50px;
+            height: 2px;
+            background-color: #e5e7eb;
+            z-index: -1;
+        }
+        
+        .step-connector.filled {
+            background-color: #10b981;
+        }
+        
+        .scroll-arrow {
+            position: absolute;
+            top: 15px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        }
+        
+        .scroll-left {
+            left: 0.5rem;
+        }
+        
+        .scroll-right {
+            right: 0.5rem;
+        }
+        
+        /* 底部按钮区域 */
+        .bottom-buttons {
+            position: fixed;
+            bottom: 60px;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background-color: white;
+            border-top: 1px solid #e2e8f0;
+            z-index: 10;
+            /* 适配iPhone底部安全区域 */
+            padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0));
+        }
+        
+        @media (min-width: 768px) {
+            .bottom-buttons {
+                width: 370px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-bottom-left-radius: 34px;
+                border-bottom-right-radius: 34px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="status-bar-left">
+                <span class="status-bar-time">9:41</span>
+            </div>
+            <div class="status-bar-right">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi ml-2"></i>
+                <i class="fas fa-battery-full ml-2 status-bar-battery"></i>
+            </div>
+        </div>
+        
+        <!-- 导航栏 -->
+        <div class="nav-bar">
+            <div class="nav-left">
+                <a href="chapter-outline.html">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </div>
+            <div class="nav-title">章节细纲</div>
+            <div class="nav-right"></div>
+        </div>
+        
+        <!-- 内容区域 -->
+        <div class="content">
+            <!-- 滚动式步骤条 -->
+            <div class="steps-scroller-container">
+                <button class="scroll-arrow scroll-left hidden" id="scroll-left">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                
+                <div class="steps-scroller" id="steps-scroller">
+                    <div class="step-item completed">
+                        <div class="step-circle completed">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="step-label">选择流派</div>
+                    </div>
+                    
+                    <div class="step-connector filled" style="width: 80px;"></div>
+                    
+                    <div class="step-item completed">
+                        <div class="step-circle completed">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="step-label">输入梗概</div>
+                    </div>
+                    
+                    <div class="step-connector filled" style="width: 80px;"></div>
+                    
+                    <div class="step-item completed">
+                        <div class="step-circle completed">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="step-label">故事要素</div>
+                    </div>
+                    
+                    <div class="step-connector filled" style="width: 80px;"></div>
+                    
+                    <div class="step-item completed">
+                        <div class="step-circle completed">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="step-label">章节大纲</div>
+                    </div>
+                    
+                    <div class="step-connector filled" style="width: 80px;"></div>
+                    
+                    <div class="step-item active">
+                        <div class="step-circle active">
+                            <span>5</span>
+                        </div>
+                        <div class="step-label">章节细纲</div>
+                    </div>
+                    
+                    <div class="step-connector" style="width: 80px;"></div>
+                    
+                    <div class="step-item">
+                        <div class="step-circle">
+                            <span>6</span>
+                        </div>
+                        <div class="step-label">生成正文</div>
+                    </div>
+                </div>
+                
+                <button class="scroll-arrow scroll-right" id="scroll-right">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            
+            <!-- 当前创作信息 -->
+            <div class="card mb-4">
+                <div class="p-4">
+                    <div class="flex items-center mb-3">
+                        <span class="badge badge-primary mr-2">男频</span>
+                        <span class="font-bold">都市-异能流</span>
+                    </div>
+                    <div class="text-sm text-secondary">
+                        <p class="line-clamp-3">大学生李天阳在一次偶然的机会下获得了一个神秘的系统，可以看到他人的情感值。从此，他的生活发生了翻天覆地的变化，不仅能够轻松应对各种人际关系，还能在危机时刻洞察他人的真实想法。在都市中游刃有余的同时，他逐渐发现这个系统背后隐藏着更大的秘密...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 章节选择器 -->
+            <div class="chapter-selector mb-4">
+                <div class="chapter-selector-header">
+                    <div class="chapter-selector-title">
+                        <i class="fas fa-book"></i> 当前章节
+                    </div>
+                    <div class="chapter-navigation">
+                        <button id="prev-chapter-btn" class="chapter-nav-btn">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button id="next-chapter-btn" class="chapter-nav-btn">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="chapter-info">
+                    <h2 id="chapter-title" class="chapter-title">第一章 神秘系统</h2>
+                    <p id="chapter-summary" class="chapter-summary">大学生李天阳在一次偶然的机会下获得了一个神秘的系统，可以看到他人的情感值。</p>
+                </div>
+            </div>
+            
+            <!-- 场景列表 -->
+            <div class="scene-list">
+                <div class="scene-list-header">
+                    <h2 class="scene-list-title">场景列表</h2>
+                </div>
+                <div id="scene-list" class="mb-4">
+                    <!-- 场景卡片将通过JavaScript动态生成 -->
+                </div>
+                
+                <!-- 添加场景按钮 -->
+                <button id="add-scene-btn" class="add-scene-btn">
+                    <i class="fas fa-plus"></i> 添加新场景
+                </button>
+            </div>
+            
+            <!-- 场景编辑器 -->
+            <div id="scene-editor" class="outline-editor mb-4">
+                <div class="outline-editor-header">
+                    <div class="outline-editor-title">
+                        <i class="fas fa-edit"></i> 场景编辑
+                    </div>
+                </div>
+                <div class="outline-editor-body">
+                    <div class="form-group">
+                        <label for="scene-title-input" class="form-label">场景标题</label>
+                        <input type="text" id="scene-title-input" class="form-control" placeholder="输入场景标题">
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="flex justify-between items-center mb-2">
+                            <label for="scene-setting-input" class="form-label mb-0">场景设定</label>
+                            <button class="generate-content-btn btn btn-sm btn-primary" data-field="setting">
+                                <i class="fas fa-magic mr-1"></i> 生成
+                            </button>
+                        </div>
+                        <textarea id="scene-setting-input" class="form-control" rows="2" placeholder="描述场景发生的地点和环境" data-counter="setting-word-count"></textarea>
+                        <div class="word-count">
+                            <span id="setting-word-count">0</span> 字
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="flex justify-between items-center mb-2">
+                            <label for="scene-characters-input" class="form-label mb-0">场景人物</label>
+                            <button class="generate-content-btn btn btn-sm btn-primary" data-field="characters">
+                                <i class="fas fa-magic mr-1"></i> 生成
+                            </button>
+                        </div>
+                        <textarea id="scene-characters-input" class="form-control" rows="2" placeholder="列出场景中出现的人物" data-counter="characters-word-count"></textarea>
+                        <div class="word-count">
+                            <span id="characters-word-count">0</span> 字
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="flex justify-between items-center mb-2">
+                            <label for="scene-goals-input" class="form-label mb-0">场景目标</label>
+                            <button class="generate-content-btn btn btn-sm btn-primary" data-field="goals">
+                                <i class="fas fa-magic mr-1"></i> 生成
+                            </button>
+                        </div>
+                        <textarea id="scene-goals-input" class="form-control" rows="2" placeholder="描述这个场景要达成的目标" data-counter="goals-word-count"></textarea>
+                        <div class="word-count">
+                            <span id="goals-word-count">0</span> 字
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="flex justify-between items-center mb-2">
+                            <label for="scene-events-input" class="form-label mb-0">场景事件</label>
+                            <button class="generate-content-btn btn btn-sm btn-primary" data-field="events">
+                                <i class="fas fa-magic mr-1"></i> 生成
+                            </button>
+                        </div>
+                        <textarea id="scene-events-input" class="form-control" rows="4" placeholder="描述场景中发生的主要事件" data-counter="events-word-count"></textarea>
+                        <div class="word-count">
+                            <span id="events-word-count">0</span> 字
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="flex justify-between items-center mb-2">
+                            <label for="scene-conflicts-input" class="form-label mb-0">场景冲突</label>
+                            <button class="generate-content-btn btn btn-sm btn-primary" data-field="conflicts">
+                                <i class="fas fa-magic mr-1"></i> 生成
+                            </button>
+                        </div>
+                        <textarea id="scene-conflicts-input" class="form-control" rows="3" placeholder="描述场景中的冲突和障碍" data-counter="conflicts-word-count"></textarea>
+                        <div class="word-count">
+                            <span id="conflicts-word-count">0</span> 字
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="flex justify-between items-center mb-2">
+                            <label for="scene-outcome-input" class="form-label mb-0">场景结果</label>
+                            <button class="generate-content-btn btn btn-sm btn-primary" data-field="outcome">
+                                <i class="fas fa-magic mr-1"></i> 生成
+                            </button>
+                        </div>
+                        <textarea id="scene-outcome-input" class="form-control" rows="3" placeholder="描述场景的结果和影响" data-counter="outcome-word-count"></textarea>
+                        <div class="word-count">
+                            <span id="outcome-word-count">0</span> 字
+                        </div>
+                    </div>
+                    
+                    <button id="save-scene-btn" class="btn btn-primary w-full">
+                        <i class="fas fa-save mr-2"></i> 保存场景
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 操作按钮 -->
+            <div class="bottom-buttons">
+                <div class="flex justify-between">
+                    <button class="btn btn-outline w-5/12" onclick="window.location.href='chapter-outline.html'">
+                        <i class="fas fa-arrow-left mr-2"></i> 上一步
+                    </button>
+                    <button id="next-button" class="btn btn-primary w-5/12" onclick="goToNextStep()">
+                        下一步 <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部标签栏 -->
+        <div class="tab-bar">
+            <a href="home.html" class="tab-item" data-tab="home">
+                <i class="fas fa-home tab-icon"></i>
+                <span>首页</span>
+            </a>
+            <a href="novel-list.html" class="tab-item" data-tab="novels">
+                <i class="fas fa-book tab-icon"></i>
+                <span>我的小说</span>
+            </a>
+            <a href="create.html" class="tab-item active" data-tab="create">
+                <i class="fas fa-plus-circle tab-icon"></i>
+                <span>创作</span>
+            </a>
+            <a href="inspiration.html" class="tab-item" data-tab="inspiration">
+                <i class="fas fa-lightbulb tab-icon"></i>
+                <span>灵感</span>
+            </a>
+            <a href="profile.html" class="tab-item" data-tab="profile">
+                <i class="fas fa-user tab-icon"></i>
+                <span>我的</span>
+            </a>
+        </div>
+    </div>
+    
+    <script src="mobile-common.js"></script>
+    <script src="detailed-outline-data.js"></script>
+    <script src="detailed-outline-functions.js"></script>
+</body>
+</html> 

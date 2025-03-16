@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>情感读心者 - AI网文小说创作助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="common.css" rel="stylesheet">
+    <style>
+        .novel-content {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: #333;
+        }
+        
+        .novel-content p {
+            margin-bottom: 1.5rem;
+            text-indent: 2em;
+        }
+        
+        .chapter-tab {
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        
+        .chapter-tab.active {
+            color: var(--neutral-primary);
+            font-weight: 600;
+            border-bottom: 2px solid var(--neutral-primary);
+        }
+        
+        .chapter-tab:hover:not(.active) {
+            color: var(--neutral-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <!-- 导航栏 -->
+        <nav class="navbar">
+            <div class="container navbar-container">
+                <a href="home.html" class="navbar-brand">AI网文小说创作助手</a>
+                <div class="navbar-nav">
+                    <a href="novel-list.html" class="nav-link active">我的小说</a>
+                    <a href="genre-selection.html" class="nav-link">创作中心</a>
+                    <a href="profile.html" class="nav-link">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=80&q=80" alt="用户头像" class="avatar">
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 主要内容 -->
+        <main class="main-content">
+            <div class="container">
+                <!-- 小说信息 -->
+                <div class="flex flex-col md:flex-row gap-6 mb-8">
+                    <div class="md:w-1/4">
+                        <div class="novel-cover w-full h-64 md:h-80 rounded-lg shadow-lg" style="background-image: url('https://images.unsplash.com/photo-1518826778770-a729fb53c3c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80');"></div>
+                    </div>
+                    <div class="md:w-3/4">
+                        <div class="flex justify-between items-start mb-4">
+                            <h1 class="text-3xl font-bold">情感读心者</h1>
+                            <div class="flex gap-2">
+                                <a href="novel-edit.html" class="btn btn-secondary">
+                                    <i class="fas fa-edit mr-1"></i> 编辑
+                                </a>
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-share-alt mr-1"></i> 分享
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex items-center mb-4">
+                            <span class="tag tag-male mr-2">男频</span>
+                            <span class="tag tag-primary mr-2">都市异能</span>
+                            <span class="tag tag-primary">连载中</span>
+                        </div>
+                        <div class="text-gray-600 mb-6">
+                            <p class="mb-2">
+                                大学生李天阳在一次偶然的机会下获得了一个神秘的系统，可以看到他人的情感值。从此，他的生活发生了翻天覆地的变化，不仅能够轻松应对各种人际关系，还能在危机时刻洞察他人的真实想法。在都市中游刃有余的同时，他逐渐发现这个系统背后隐藏着更大的秘密...
+                            </p>
+                        </div>
+                        <div class="flex flex-wrap gap-4 text-gray-500 text-sm mb-6">
+                            <div><i class="far fa-calendar-alt mr-1"></i> 创建时间：2023-08-15</div>
+                            <div><i class="far fa-edit mr-1"></i> 最近更新：3天前</div>
+                            <div><i class="fas fa-book mr-1"></i> 总字数：32,456字</div>
+                            <div><i class="fas fa-list-ol mr-1"></i> 章节数：8章</div>
+                        </div>
+                        <div class="flex gap-4">
+                            <button class="btn btn-primary">
+                                <i class="fas fa-book-reader mr-1"></i> 开始阅读
+                            </button>
+                            <button class="btn btn-secondary" onclick="toggleReadingSettings()">
+                                <i class="fas fa-cog mr-1"></i> 阅读设置
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 阅读设置面板 -->
+                <div id="reading-settings" class="card mb-8 hidden">
+                    <div class="card-header">
+                        <h2 class="card-title">阅读设置</h2>
+                        <button class="btn btn-sm btn-secondary" onclick="toggleReadingSettings()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div>
+                                <h3 class="font-bold mb-3">字体大小</h3>
+                                <div class="flex gap-2">
+                                    <button class="btn btn-secondary" onclick="changeFontSize('sm')">小</button>
+                                    <button class="btn btn-primary" onclick="changeFontSize('md')">中</button>
+                                    <button class="btn btn-secondary" onclick="changeFontSize('lg')">大</button>
+                                    <button class="btn btn-secondary" onclick="changeFontSize('xl')">特大</button>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="font-bold mb-3">背景颜色</h3>
+                                <div class="flex gap-2">
+                                    <button class="btn btn-primary" onclick="changeBackground('white')">白色</button>
+                                    <button class="btn btn-secondary" onclick="changeBackground('gray-100')">灰色</button>
+                                    <button class="btn btn-secondary" onclick="changeBackground('yellow-50')">护眼</button>
+                                    <button class="btn btn-secondary" onclick="changeBackground('green-50')">绿色</button>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="font-bold mb-3">其他设置</h3>
+                                <div class="flex gap-2">
+                                    <button class="btn btn-secondary">
+                                        <i class="fas fa-bookmark mr-1"></i> 添加书签
+                                    </button>
+                                    <button class="btn btn-secondary">
+                                        <i class="fas fa-moon mr-1"></i> 夜间模式
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 章节选择 -->
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold mb-4">章节列表</h2>
+                    <div class="flex overflow-x-auto pb-2 border-b">
+                        <div class="chapter-tab active px-4 py-2" onclick="switchChapter(0)">第1章：意外的礼物</div>
+                        <div class="chapter-tab px-4 py-2" onclick="switchChapter(1)">第2章：初试能力</div>
+                        <div class="chapter-tab px-4 py-2" onclick="switchChapter(2)">第3章：神秘女孩</div>
+                        <div class="chapter-tab px-4 py-2" onclick="switchChapter(3)">第4章：隐秘组织</div>
+                        <div class="chapter-tab px-4 py-2" onclick="switchChapter(4)">第5章：能力升级</div>
+                        <div class="chapter-tab px-4 py-2" onclick="switchChapter(5)">第6章：真相浮出</div>
+                        <div class="chapter-tab px-4 py-2" onclick="switchChapter(6)">第7章：最终对决</div>
+                        <div class="chapter-tab px-4 py-2" onclick="switchChapter(7)">第8章：新的开始</div>
+                    </div>
+                </div>
+
+                <!-- 章节内容 -->
+                <div class="chapter-content-section bg-white p-6 rounded-lg shadow-md mb-8">
+                    <h2 class="text-2xl font-bold mb-6 text-center">第一章 意外的礼物</h2>
+                    <div class="novel-content">
+                        <p>李天阳匆匆穿过校园的林荫道，秋日的阳光透过树叶的缝隙洒在地上，形成斑驳的光影。他看了看手表，距离马教授的高等数学课开始只剩下五分钟了。</p>
+                        <p>"该死，又要迟到了！"李天阳暗自咒骂着，加快了脚步。</p>
+                        <p>就在这时，一个踉跄的身影出现在他的前方。一位白发苍苍的老人似乎被什么东西绊了一下，正摇摇晃晃地向前倾倒。李天阳几乎是本能地冲上前去，及时扶住了老人。</p>
+                        <p>"您没事吧？"李天阳关切地问道。</p>
+                        <p>老人抬起头，露出一张布满皱纹却透着慈祥的脸。"谢谢你，年轻人。这把老骨头不太灵活了。"</p>
+                        <p>李天阳注意到老人掉落在地上的几本书和一个小布袋，连忙蹲下身去帮他捡起来。</p>
+                        <p>"您慢点，这些东西我来帮您拿。"李天阳一边说着，一边将书本和布袋递给老人。</p>
+                        <p>老人接过物品，感激地看着李天阳。"现在像你这样热心的年轻人不多了。"他的目光中闪烁着某种李天阳无法理解的光芒，"我想给你一点回报。"</p>
+                        <p>"不用了，举手之劳而已。"李天阳摆摆手，心里想着即将开始的课程。</p>
+                        <p>老人却坚持从布袋中取出一个银色的手环。手环看起来很普通，没有任何花纹或装饰，但在阳光下泛着微微的光泽。</p>
+                        <p>"这个送给你，"老人将手环递给李天阳，"它会帮助你看清这个世界。"</p>
+                        <p>李天阳有些困惑，但出于礼貌还是接过了手环。"谢谢您，不过我真的要迟到了..."</p>
+                        <p>"去吧，年轻人。"老人微笑着说，"记住，真正的力量来自于如何使用它，而不是拥有它。"</p>
+                        <p>李天阳匆忙道别，将手环随手塞进口袋，继续朝教学楼跑去。他并没有注意到，当他转身离开时，老人的身影在阳光下变得模糊，最后竟然完全消失了。</p>
+                        <p>高等数学课上，李天阳心不在焉地听着马教授讲解复杂的公式。他的手指无意识地摩挲着口袋里的手环，感受着它光滑的表面。出于好奇，他将手环拿出来仔细端详。</p>
+                        <p>"看起来就是个普通的手环嘛，"李天阳心想，"不过既然是别人的心意，戴上看看也无妨。"</p>
+                        <p>他将手环戴在右手腕上，意外地发现它刚好合适，既不松也不紧，就像是专门为他定制的一样。</p>
+                        <p>就在手环扣上的那一刻，李天阳感到一阵轻微的眩晕。当他再次睁开眼睛时，世界似乎没有任何变化，但很快他就发现了不对劲的地方。</p>
+                        <p>马教授头顶上方漂浮着一个数字"78"，呈现出淡蓝色的光芒。而坐在前排的学霸张明头上则是一个"92"，颜色是明亮的绿色。</p>
+                        <p>"我出现幻觉了？"李天阳揉了揉眼睛，但那些数字和颜色依然清晰可见。</p>
+                        <p>他环顾四周，发现教室里的每个人头顶上都有类似的数字和颜色，数值从30多到90多不等，颜色也各不相同。</p>
+                        <p>"这是什么情况？"李天阳的心跳加速，他低头看了看手腕上的银色手环，突然想起老人的话："它会帮助你看清这个世界。"</p>
+                        <p>难道这些数字和颜色代表着什么？人的情绪？性格？还是...情感？</p>
+                        <p>李天阳决定做个实验。他故意用笔敲了敲前面同学的椅背，那个同学回头瞪了他一眼，头顶上的数字从"65"变成了"58"，颜色也从黄色变成了略带红色的橙色。</p>
+                        <p>"看来是情绪变化！"李天阳恍然大悟，"数字可能代表情绪的强度，颜色代表情绪的类型。"</p>
+                        <p>这个发现让李天阳既兴奋又害怕。他现在能看到别人的情感，这简直就像是拥有了读心术！</p>
+                        <p>下课铃响起，李天阳收拾好书本，心不在焉地走出教室。他的脑海中充满了各种可能性：他可以知道谁对他有好感，可以预判别人的反应，甚至可以在谈判或辩论中占据绝对优势...</p>
+                        <p>但同时，一个更深层次的问题浮现在他的心头：为什么那个神秘的老人会给他这样一个"礼物"？这种能力背后又隐藏着什么秘密？</p>
+                        <p>带着这些疑问，李天阳走向食堂，准备吃午饭。他不知道的是，这个看似普通的手环将彻底改变他的生活，带他进入一个充满未知和危险的世界。而在校园的某个角落，一个他看不到情感值的神秘女孩正注视着他，眼中闪烁着复杂的光芒...</p>
+                    </div>
+                </div>
+
+                <!-- 章节导航 -->
+                <div class="flex justify-between mb-8">
+                    <button class="btn btn-secondary" disabled>
+                        <i class="fas fa-chevron-left mr-2"></i> 上一章
+                    </button>
+                    <button class="btn btn-primary">
+                        下一章 <i class="fas fa-chevron-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- 页脚 -->
+        <footer class="bg-gray-800 text-white py-6">
+            <div class="container text-center">
+                <p class="text-gray-400">© 2023 AI网文小说创作助手. 保留所有权利.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="common.js"></script>
+</body>
+</html> 

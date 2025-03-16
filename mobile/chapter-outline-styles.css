@@ -1,0 +1,155 @@
+/* 章节大纲页面专用样式 */
+
+/* 章节卡片样式 */
+.chapter-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    background-color: #fff;
+    transition: all 0.2s ease;
+}
+
+.chapter-card:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.chapter-card-header {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chapter-card-title {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.chapter-card-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.chapter-card-body {
+    padding: 1rem;
+}
+
+.chapter-card-footer {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9fafb;
+}
+
+/* 章节设置表单 */
+.chapter-settings {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: #f9fafb;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+}
+
+.chapter-settings-title {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+}
+
+.chapter-settings-title i {
+    margin-right: 0.5rem;
+    color: #4b5563;
+}
+
+.chapter-settings-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.chapter-settings-item {
+    flex: 1;
+    min-width: 120px;
+}
+
+/* 章节数量选择器 */
+.chapter-count-selector {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background-color: #f9fafb;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+}
+
+.chapter-count-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    min-width: 2rem;
+    text-align: center;
+}
+
+.chapter-count-btn {
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 1px solid #e5e7eb;
+    color: #4b5563;
+}
+
+.chapter-count-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 生成按钮 */
+.generate-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #3b82f6;
+    color: white;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    transition: all 0.2s ease;
+}
+
+.generate-btn:hover {
+    background-color: #2563eb;
+}
+
+.generate-btn i {
+    margin-right: 0.5rem;
+}
+
+/* 章节列表 */
+.chapter-list {
+    margin-bottom: 5rem;
+}
+
+/* 响应式调整 */
+@media (max-width: 360px) {
+    .chapter-settings-row {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .chapter-settings-item {
+        width: 100%;
+    }
+} 

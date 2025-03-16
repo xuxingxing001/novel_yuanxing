@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>选择流派 - AI网文小说创作助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="common.css" rel="stylesheet">
+    <style>
+        .genre-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .genre-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .genre-card.selected {
+            border-color: var(--color-primary);
+            background-color: var(--color-primary-light);
+        }
+        
+        .genre-card.male.selected {
+            border-color: var(--color-male);
+            background-color: var(--color-male-light);
+        }
+        
+        .genre-card.female.selected {
+            border-color: var(--color-female);
+            background-color: var(--color-female-light);
+        }
+        
+        .channel-tab {
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .channel-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: currentColor;
+        }
+        
+        .subgenre-item {
+            transition: all 0.2s;
+        }
+        
+        .subgenre-item:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .subgenre-item.selected {
+            background-color: #e5e7eb;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <!-- 导航栏 -->
+        <nav class="navbar">
+            <div class="container navbar-container">
+                <a href="home.html" class="navbar-brand">AI网文小说创作助手</a>
+                <div class="navbar-nav">
+                    <a href="novel-list.html" class="nav-link">我的小说</a>
+                    <a href="genre-selection.html" class="nav-link active">创作中心</a>
+                    <a href="profile.html" class="nav-link">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=80&q=80" alt="用户头像" class="avatar">
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 主要内容 -->
+        <main class="main-content">
+            <div class="container">
+                <!-- 小说标题显示区域 -->
+                <div class="novel-title-display">
+                    <h1 id="novel-title-display" class="novel-title-text">未命名作品</h1>
+                    <button id="novel-title-edit-btn" class="novel-title-edit-btn">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </div>
+                
+                <!-- 步骤条 -->
+                <div class="steps">
+                    <div class="step active">
+                        <div class="step-number">1</div>
+                        <div class="step-label">选择流派</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-label">输入梗概</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-label">故事要素</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-label">章节大纲</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-label">章节细纲</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">6</div>
+                        <div class="step-label">生成正文</div>
+                    </div>
+                </div>
+
+                <!-- 页面标题 -->
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-center">选择创作流派</h1>
+                    <p class="text-center text-gray-600 mt-2">选择您想要创作的小说流派，AI将根据不同流派的特点为您提供创作建议</p>
+                </div>
+
+                <!-- 步骤导航 -->
+                <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                    <h3 class="font-bold mb-2">创作进度</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-sm px-3 py-1 bg-blue-50 border border-blue-200 rounded flex items-center font-bold">
+                            <i class="fas fa-pen text-blue-500 mr-1"></i> 当前：选择流派
+                        </span>
+                        <a href="story-outline.html" class="text-sm px-3 py-1 bg-white border rounded hover:bg-gray-100 flex items-center opacity-75">
+                            <i class="fas fa-circle text-gray-300 mr-1"></i> 下一步：输入梗概
+                        </a>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">您可以随时点击切换到其他步骤，系统会自动保存您的进度</p>
+                </div>
+
+                <!-- 频道选择 -->
+                <div class="mb-8">
+                    <div class="flex justify-center mb-6">
+                        <div class="inline-flex rounded-md shadow-sm">
+                            <button id="male-channel" class="channel-tab px-8 py-3 text-lg font-medium text-blue-600 bg-blue-50 rounded-l-lg border border-blue-200 hover:bg-blue-100 active" onclick="switchChannel('male')">
+                                <i class="fas fa-mars mr-2"></i> 男频
+                            </button>
+                            <button id="female-channel" class="channel-tab px-8 py-3 text-lg font-medium text-pink-600 bg-white rounded-r-lg border border-gray-200 hover:bg-pink-50" onclick="switchChannel('female')">
+                                <i class="fas fa-venus mr-2"></i> 女频
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 最近使用 -->
+                <div class="mb-8" id="recent-used">
+                    <h2 class="text-xl font-bold mb-4">最近使用</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="genre-card male border rounded-lg p-4 selected" onclick="selectGenre(this)">
+                            <div class="flex items-center mb-2">
+                                <span class="tag tag-male">男频</span>
+                                <h3 class="font-bold ml-2">都市-异能流</h3>
+                            </div>
+                            <p class="text-sm text-gray-600">主角在都市中获得超能力，逆袭崛起</p>
+                        </div>
+                        <div class="genre-card female border rounded-lg p-4" onclick="selectGenre(this)">
+                            <div class="flex items-center mb-2">
+                                <span class="tag tag-female">女频</span>
+                                <h3 class="font-bold ml-2">古代-宫廷流</h3>
+                            </div>
+                            <p class="text-sm text-gray-600">女主在宫廷中步步为营，成就传奇</p>
+                        </div>
+                        <div class="genre-card male border rounded-lg p-4" onclick="selectGenre(this)">
+                            <div class="flex items-center mb-2">
+                                <span class="tag tag-male">男频</span>
+                                <h3 class="font-bold ml-2">玄幻-升级流</h3>
+                            </div>
+                            <p class="text-sm text-gray-600">主角获得神秘传承，一路升级打怪</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 流派选择（三级联动） -->
+                <div class="mb-8">
+                    <h2 class="text-xl font-bold mb-4">流派选择</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <!-- 第二级：流派大类 -->
+                        <div class="col-span-1">
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <h3 class="font-bold mb-3 text-gray-700">流派大类</h3>
+                                <div id="genre-categories" class="space-y-1">
+                                    <!-- 流派大类内容由JS动态生成 -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 第三级：具体类型 -->
+                        <div class="col-span-3">
+                            <div class="bg-white rounded-lg border p-4">
+                                <h3 class="font-bold mb-3 text-gray-700">具体类型</h3>
+                                
+                                <!-- 都市类型 -->
+                                <div id="urban-types" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <!-- 都市类型内容由JS动态生成 -->
+                                </div>
+                                
+                                <!-- 玄幻类型 -->
+                                <div id="fantasy-types" class="grid grid-cols-1 md:grid-cols-3 gap-4 hidden">
+                                    <!-- 玄幻类型内容由JS动态生成 -->
+                                </div>
+                                
+                                <!-- 仙侠类型 -->
+                                <div id="xianxia-types" class="grid grid-cols-1 md:grid-cols-3 gap-4 hidden">
+                                    <!-- 仙侠类型内容由JS动态生成 -->
+                                </div>
+                                
+                                <!-- 科幻类型 -->
+                                <div id="scifi-types" class="grid grid-cols-1 md:grid-cols-3 gap-4 hidden">
+                                    <!-- 科幻类型内容由JS动态生成 -->
+                                </div>
+                                
+                                <!-- 历史类型 -->
+                                <div id="history-types" class="grid grid-cols-1 md:grid-cols-3 gap-4 hidden">
+                                    <!-- 历史类型内容由JS动态生成 -->
+                                </div>
+                                
+                                <!-- 游戏类型 -->
+                                <div id="game-types" class="grid grid-cols-1 md:grid-cols-3 gap-4 hidden">
+                                    <!-- 游戏类型内容由JS动态生成 -->
+                                </div>
+                                
+                                <!-- 未来类型 -->
+                                <div id="future-types" class="grid grid-cols-1 md:grid-cols-3 gap-4 hidden">
+                                    <!-- 未来类型内容由JS动态生成 -->
+                                </div>
+                                
+                                <!-- 女频特有类型的容器会由JS动态创建 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 当前选择 -->
+                <div class="card mb-8">
+                    <div class="card-header">
+                        <h2 class="card-title">当前选择</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="flex items-center">
+                            <span id="selected-channel-tag" class="tag tag-male mr-2">男频</span>
+                            <span id="selected-genre" class="font-bold">都市-异能流</span>
+                        </div>
+                        <p id="selected-description" class="text-gray-600 mt-2">
+                            主角在都市中获得超能力，逆袭崛起，成为人生赢家。这类小说通常包含职场、学校等现实场景，同时融入超自然能力元素。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 操作按钮 -->
+                <div class="flex justify-end">
+                    <a href="story-outline.html" class="btn btn-primary">
+                        <i class="fas fa-arrow-right mr-2"></i> 下一步
+                    </a>
+                </div>
+            </div>
+        </main>
+
+        <!-- 页脚 -->
+        <footer class="bg-gray-800 text-white py-6">
+            <div class="container text-center">
+                <p class="text-gray-400">© 2023 AI网文小说创作助手. 保留所有权利.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="common.js"></script>
+    <!-- 引入流派数据和工具函数 -->
+    <script src="../consolidated-genres.js"></script>
+    <script src="../genre-utils.js"></script>
+    <script src="../genre-descriptions.js"></script>
+    <script src="../debug.js"></script>
+    <script>
+        // 选择流派卡片
+        function selectGenre(element) {
+            // 移除所有选中状态
+            document.querySelectorAll('.genre-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // 添加选中状态
+            element.classList.add('selected');
+            
+            // 获取流派名称和频道
+            const genreName = element.querySelector('h3').textContent;
+            const isFemaleBadge = element.querySelector('.tag-female');
+            const channel = isFemaleBadge ? 'female' : 'male';
+            
+            // 更新当前选择
+            document.getElementById('selected-genre').textContent = genreName;
+            document.getElementById('selected-channel-tag').className = isFemaleBadge ? 'tag tag-female mr-2' : 'tag tag-male mr-2';
+            document.getElementById('selected-channel-tag').textContent = isFemaleBadge ? '女频' : '男频';
+            
+            // 更新描述
+            updateDescription(genreName);
+            
+            // 切换频道
+            if (isFemaleBadge) {
+                switchChannel('female', false);
+            } else {
+                switchChannel('male', false);
+            }
+        }
+        
+        // 更新描述
+        function updateDescription(genreName) {
+            // 从流派名称中提取大类和小类
+            const parts = genreName.split('-');
+            if (parts.length !== 2) return;
+            
+            const category = parts[0].trim();
+            const subtype = parts[1].trim();
+            
+            // 查找对应的描述
+            let description = '';
+            const channel = document.getElementById('selected-channel-tag').textContent === '女频' ? 'female' : 'male';
+            
+            if (channel === 'male') {
+                const categoryData = maleGenres[getCategoryKey(category)];
+                if (categoryData) {
+                    const subtypeData = categoryData.find(item => item.name === subtype);
+                    if (subtypeData) {
+                        description = subtypeData.description;
+                        // 添加更详细的描述
+                        description += '。这类小说通常' + getDetailedDescription(category, subtype);
+                    }
+                }
+            } else {
+                const categoryData = femaleGenres[getCategoryKey(category)];
+                if (categoryData) {
+                    const subtypeData = categoryData.find(item => item.name === subtype);
+                    if (subtypeData) {
+                        description = subtypeData.description;
+                        // 添加更详细的描述
+                        description += '。这类小说通常' + getDetailedDescription(category, subtype);
+                    }
+                }
+            }
+            
+            if (description) {
+                document.getElementById('selected-description').textContent = description;
+            }
+        }
+        
+        // 获取类别键名
+        function getCategoryKey(category) {
+            // 将中文类别名转换为对应的键名
+            switch (category) {
+                case '都市': return 'urban';
+                case '玄幻': return 'fantasy';
+                case '仙侠': return 'xianxia';
+                case '科幻': return 'scifi';
+                case '历史': return 'history';
+                case '游戏': return 'game';
+                case '未来': return 'future';
+                case '古代': return 'ancient';
+                case '幻想': return 'fantasy_world';
+                case '现代言情': return 'modern_romance';
+                case '悬疑推理': return 'mystery';
+                default: return '';
+            }
+        }
+        
+        // 获取详细描述
+        function getDetailedDescription(category, subtype) {
+            // 根据类别和子类型返回更详细的描述
+            const channel = document.getElementById('selected-channel-tag').textContent === '女频' ? 'female' : 'male';
+            const categoryKey = getCategoryKey(category);
+            
+            if (genreDescriptions && genreDescriptions[channel] && 
+                genreDescriptions[channel][categoryKey] && 
+                genreDescriptions[channel][categoryKey][subtype]) {
+                return genreDescriptions[channel][categoryKey][subtype];
+            }
+            
+            // 默认描述
+            if (category === '都市' && subtype === '异能流') {
+                return '包含职场、学校等现实场景，同时融入超自然能力元素';
+            } else if (category === '玄幻' && subtype === '升级流') {
+                return '包含丰富的世界观设定和独特的修炼体系';
+            } else if (category === '古代' && subtype === '宫廷流') {
+                return '包含宫廷斗争、权谋较量等元素';
+            } else {
+                return '具有该类型的典型特征和情节发展';
+            }
+        }
+        
+        // 频道切换
+        function switchChannel(channel, updateUI = true) {
+            if (updateUI) {
+                // 重置样式
+                document.getElementById('male-channel').classList.remove('active', 'bg-blue-50', 'text-blue-600');
+                document.getElementById('male-channel').classList.add('bg-white', 'text-gray-700');
+                document.getElementById('female-channel').classList.remove('active', 'bg-pink-50', 'text-pink-600');
+                document.getElementById('female-channel').classList.add('bg-white', 'text-gray-700');
+                
+                // 设置选中样式
+                if (channel === 'male') {
+                    document.getElementById('male-channel').classList.add('active', 'bg-blue-50', 'text-blue-600');
+                    document.getElementById('male-channel').classList.remove('bg-white', 'text-gray-700');
+                    document.getElementById('selected-channel-tag').className = 'tag tag-male mr-2';
+                    document.getElementById('selected-channel-tag').textContent = '男频';
+                } else {
+                    document.getElementById('female-channel').classList.add('active', 'bg-pink-50', 'text-pink-600');
+                    document.getElementById('female-channel').classList.remove('bg-white', 'text-gray-700');
+                    document.getElementById('selected-channel-tag').className = 'tag tag-female mr-2';
+                    document.getElementById('selected-channel-tag').textContent = '女频';
+                }
+            }
+            
+            // 更新流派列表
+            updateGenreList(channel);
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化小说标题
+            initNovelTitle();
+            
+            // 初始化所有流派内容
+            initializeGenreContents();
+            
+            // 默认选中男频
+            switchChannel('male');
+            
+            // 调试流派数据
+            debugGenres();
+        });
+    </script>
+</body>
+</html> 

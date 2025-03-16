@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>内容生成 - AI网文小说创作助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="mobile-common.css" rel="stylesheet">
+    <style>
+        /* 滚动式步骤条样式 */
+        .steps-scroller-container {
+            position: relative;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        
+        .steps-scroller {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Firefox */
+            padding: 0.5rem 0;
+        }
+        
+        .steps-scroller::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+        
+        .step-item {
+            flex: 0 0 auto;
+            width: 80px;
+            scroll-snap-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 0.25rem;
+        }
+        
+        .step-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+            position: relative;
+            background-color: #e5e7eb;
+            color: #6b7280;
+        }
+        
+        .step-circle.completed {
+            background-color: #10b981;
+            color: white;
+        }
+        
+        .step-circle.active {
+            background-color: #6366f1;
+            color: white;
+        }
+        
+        .step-label {
+            font-size: 0.7rem;
+            text-align: center;
+            color: #6b7280;
+            max-width: 100%;
+            white-space: normal;
+            line-height: 1.2;
+        }
+        
+        .step-item.completed .step-label,
+        .step-item.active .step-label {
+            color: #374151;
+            font-weight: 600;
+        }
+        
+        .step-connector {
+            position: absolute;
+            top: 25px;
+            left: 50px;
+            height: 2px;
+            background-color: #e5e7eb;
+            z-index: -1;
+        }
+        
+        .step-connector.filled {
+            background-color: #10b981;
+        }
+        
+        .scroll-arrow {
+            position: absolute;
+            top: 15px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        }
+        
+        .scroll-left {
+            left: 0.5rem;
+        }
+        
+        .scroll-right {
+            right: 0.5rem;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="status-bar-left">
+                <span class="status-bar-time">22:36</span>
+            </div>
+            <div class="status-bar-right">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi ml-2"></i>
+                <i class="fas fa-battery-full ml-2 status-bar-battery"></i>
+            </div>
+        </div>
+        
+        <!-- 导航栏 -->
+        <div class="nav-bar">
+            <div class="nav-left">
+                <a href="detailed-outline.html">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </div>
+            <div class="nav-title">内容生成</div>
+            <div class="nav-right"></div>
+        </div>
+        
+        <!-- 内容区域 -->
+        <div class="content">
+            <!-- 滚动式步骤条 -->
+            <div class="steps-scroller-container">
+                <button class="scroll-arrow scroll-left" id="scroll-left">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                
+                <div class="steps-scroller" id="steps-scroller">
+                    <div class="step-item completed">
+                        <div class="step-circle completed">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="step-label">选择流派</div>
+                    </div>
+                    
+                    <div class="step-connector filled" style="width: 80px;"></div>
+                    
+                    <div class="step-item completed">
+                        <div class="step-circle completed">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="step-label">输入梗概</div>
+                    </div>
+                    
+                    <div class="step-connector filled" style="width: 80px;"></div>
+                    
+                    <div class="step-item completed">
+                        <div class="step-circle completed">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="step-label">故事要素</div>
+                    </div>
+                    
+                    <div class="step-connector filled" style="width: 80px;"></div>
+                    
+                    <div class="step-item completed">
+                        <div class="step-circle completed">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="step-label">章节大纲</div>
+                    </div>
+                    
+                    <div class="step-connector filled" style="width: 80px;"></div>
+                    
+                    <div class="step-item completed">
+                        <div class="step-circle completed">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="step-label">章节细纲</div>
+                    </div>
+                    
+                    <div class="step-connector filled" style="width: 80px;"></div>
+                    
+                    <div class="step-item active">
+                        <div class="step-circle active">
+                            <span>6</span>
+                        </div>
+                        <div class="step-label">生成正文</div>
+                    </div>
+                </div>
+                
+                <button class="scroll-arrow scroll-right" id="scroll-right">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            
+            <!-- 当前频道和流派信息 -->
+            <div class="p-4 bg-blue-50 rounded-lg mb-4 flex items-center">
+                <span class="badge badge-primary mr-2">男频</span>
+                <span class="font-bold">都市-异能流</span>
+            </div>
+            
+            <!-- 当前创作信息 -->
+            <div class="card mb-4">
+                <div class="p-4">
+                    <h2 class="text-lg font-bold mb-2">小说梗概</h2>
+                    <div class="text-sm text-secondary">
+                        <p class="line-clamp-3">大学生李天阳在一次偶然的机会下获得了一个神秘的系统，可以看到他人的情感值。从此，他的生活发生了翻天覆地的变化，不仅能够轻松应对各种人际关系，还能在危机时刻洞察他人的真实想法。在都市中游刃有余的同时，他逐渐发现这个系统背后隐藏着更大的秘密...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 章节选择 -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2 class="card-title">选择章节</h2>
+                </div>
+                <div class="card-body">
+                    <select class="form-control mb-3">
+                        <option>第一章 意外获得能力</option>
+                        <option>第二章 能力初探</option>
+                        <option>第三章 初显锋芒</option>
+                        <option>第四章 能力升级</option>
+                        <option>第五章 强敌出现</option>
+                    </select>
+                    
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                        <h3 class="font-bold text-sm mb-2">章节概要</h3>
+                        <p class="text-sm text-gray-600">大学生李天阳在一次偶然的机会下获得了一个神秘的系统，可以看到他人的情感值。从此，他的生活发生了翻天覆地的变化...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 生成设置 -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2 class="card-title">生成设置</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-group mb-3">
+                        <label class="form-label">文风类型</label>
+                        <select class="form-control">
+                            <option>轻松诙谐</option>
+                            <option>严肃正经</option>
+                            <option>热血激昂</option>
+                            <option>细腻深沉</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label class="form-label">字数范围</label>
+                        <select class="form-control">
+                            <option>2000-3000字</option>
+                            <option>3000-4000字</option>
+                            <option>4000-5000字</option>
+                            <option>5000字以上</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">内容偏好</label>
+                        <div class="flex flex-wrap gap-2 mt-2">
+                            <div class="checkbox-btn">
+                                <input type="checkbox" id="dialog" checked>
+                                <label for="dialog">对话丰富</label>
+                            </div>
+                            <div class="checkbox-btn">
+                                <input type="checkbox" id="description" checked>
+                                <label for="description">场景描写</label>
+                            </div>
+                            <div class="checkbox-btn">
+                                <input type="checkbox" id="action">
+                                <label for="action">动作戏</label>
+                            </div>
+                            <div class="checkbox-btn">
+                                <input type="checkbox" id="emotion" checked>
+                                <label for="emotion">情感刻画</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 生成按钮 -->
+            <button class="btn btn-primary btn-block mb-4">
+                <i class="fas fa-magic mr-2"></i> 生成章节内容
+            </button>
+            
+            <!-- 操作按钮 -->
+            <div class="fixed bottom-24 left-0 right-0 p-4 bg-white border-t">
+                <div class="flex justify-between">
+                    <button class="btn btn-outline w-5/12" onclick="window.location.href='detailed-outline.html'">
+                        <i class="fas fa-arrow-left mr-2"></i> 上一步
+                    </button>
+                    <button id="next-button" class="btn btn-primary w-5/12">
+                        完成 <i class="fas fa-check ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部标签栏 -->
+        <div class="tab-bar">
+            <a href="home.html" class="tab-item" data-tab="home">
+                <i class="fas fa-home tab-icon"></i>
+                <span>首页</span>
+            </a>
+            <a href="novel-list.html" class="tab-item" data-tab="novels">
+                <i class="fas fa-book tab-icon"></i>
+                <span>我的小说</span>
+            </a>
+            <a href="create.html" class="tab-item active" data-tab="create">
+                <i class="fas fa-plus-circle tab-icon"></i>
+                <span>创作</span>
+            </a>
+            <a href="inspiration.html" class="tab-item" data-tab="inspiration">
+                <i class="fas fa-lightbulb tab-icon"></i>
+                <span>灵感</span>
+            </a>
+            <a href="profile.html" class="tab-item" data-tab="profile">
+                <i class="fas fa-user tab-icon"></i>
+                <span>我的</span>
+            </a>
+        </div>
+    </div>
+    
+    <script src="mobile-common.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const scroller = document.getElementById('steps-scroller');
+            const scrollLeftBtn = document.getElementById('scroll-left');
+            const scrollRightBtn = document.getElementById('scroll-right');
+            const activeStep = document.querySelector('.step-item.active');
+            
+            // 初始滚动到活动步骤
+            if (activeStep) {
+                setTimeout(() => {
+                    activeStep.scrollIntoView({
+                        behavior: 'smooth',
+                        inline: 'center',
+                        block: 'nearest'
+                    });
+                }, 300);
+            }
+            
+            // 左右滚动按钮
+            scrollLeftBtn.addEventListener('click', function() {
+                scroller.scrollBy({
+                    left: -120,
+                    behavior: 'smooth'
+                });
+            });
+            
+            scrollRightBtn.addEventListener('click', function() {
+                scroller.scrollBy({
+                    left: 120,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // 监听滚动事件，控制箭头显示
+            scroller.addEventListener('scroll', function() {
+                // 显示/隐藏左箭头
+                if (scroller.scrollLeft > 20) {
+                    scrollLeftBtn.classList.remove('hidden');
+                } else {
+                    scrollLeftBtn.classList.add('hidden');
+                }
+                
+                // 显示/隐藏右箭头
+                if (scroller.scrollLeft + scroller.clientWidth >= scroller.scrollWidth - 20) {
+                    scrollRightBtn.classList.add('hidden');
+                } else {
+                    scrollRightBtn.classList.remove('hidden');
+                }
+            });
+            
+            // 初始触发一次滚动事件来设置箭头状态
+            scroller.dispatchEvent(new Event('scroll'));
+            
+            // 添加自定义的checkbox样式
+            document.head.insertAdjacentHTML('beforeend', `
+                <style>
+                    .checkbox-btn {
+                        position: relative;
+                        overflow: hidden;
+                    }
+                    
+                    .checkbox-btn input {
+                        position: absolute;
+                        left: -9999px;
+                    }
+                    
+                    .checkbox-btn label {
+                        display: inline-block;
+                        padding: 0.5rem 0.75rem;
+                        border: 1px solid #d1d5db;
+                        border-radius: 0.375rem;
+                        font-size: 0.875rem;
+                        cursor: pointer;
+                        transition: all 0.2s ease;
+                    }
+                    
+                    .checkbox-btn input:checked + label {
+                        background-color: #3b82f6;
+                        color: white;
+                        border-color: #3b82f6;
+                    }
+                </style>
+            `);
+        });
+    </script>
+</body>
+</html> 

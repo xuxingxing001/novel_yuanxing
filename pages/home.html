@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI网文小说创作助手 - 首页</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="common.css" rel="stylesheet">
+</head>
+<body>
+    <div class="page-container">
+        <!-- 导航栏 -->
+        <nav class="navbar">
+            <div class="container navbar-container">
+                <a href="home.html" class="navbar-brand">AI网文小说创作助手</a>
+                <div class="navbar-nav">
+                    <a href="novel-list.html" class="nav-link">我的小说</a>
+                    <a href="genre-selection.html" class="nav-link">创作中心</a>
+                    <a href="profile.html" class="nav-link">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=80&q=80" alt="用户头像" class="avatar">
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 主要内容 -->
+        <main class="main-content">
+            <div class="container">
+                <!-- 英雄区域 -->
+                <div class="flex flex-col md:flex-row items-center mb-16">
+                    <div class="md:w-1/2 mb-8 md:mb-0 md:pr-8">
+                        <h1 class="text-4xl font-bold mb-4">AI驱动的网文创作新体验</h1>
+                        <p class="text-lg text-gray-600 mb-6">
+                            告别创作瓶颈，让AI助你打造爆款网文。从灵感生成到章节大纲，从情节构思到人物塑造，一站式解决网文创作难题。
+                        </p>
+                        <div class="flex flex-wrap gap-4">
+                            <a href="genre-selection.html" class="btn btn-primary btn-lg">
+                                <i class="fas fa-pen-fancy mr-2"></i> 开始创作
+                            </a>
+                            <a href="#features" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-info-circle mr-2"></i> 了解更多
+                            </a>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2">
+                        <img src="https://images.unsplash.com/photo-1519791883288-dc8bd696e667?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="AI创作插图" class="rounded-lg shadow-lg w-full">
+                    </div>
+                </div>
+
+                <!-- 特色功能 -->
+                <section id="features" class="mb-16">
+                    <h2 class="text-3xl font-bold text-center mb-12">特色功能</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="card p-6">
+                            <div class="text-center mb-4">
+                                <i class="fas fa-lightbulb text-4xl text-yellow-500"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2 text-center">灵感生成</h3>
+                            <p class="text-gray-600">
+                                告别创作瓶颈，AI智能分析热门网文套路，为你提供源源不断的创作灵感，让你的小说紧跟读者喜好。
+                            </p>
+                        </div>
+                        <div class="card p-6">
+                            <div class="text-center mb-4">
+                                <i class="fas fa-sitemap text-4xl text-blue-500"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2 text-center">章节大纲</h3>
+                            <p class="text-gray-600">
+                                根据你的创作意图，自动生成符合网文节奏的章节大纲，让情节起伏有度，爽点层出不穷。
+                            </p>
+                        </div>
+                        <div class="card p-6">
+                            <div class="text-center mb-4">
+                                <i class="fas fa-book-open text-4xl text-green-500"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2 text-center">内容生成</h3>
+                            <p class="text-gray-600">
+                                基于大纲一键生成高质量内容，支持男频、女频多种风格，让你的小说既有套路又有新意。
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 创作流程 -->
+                <section class="mb-16">
+                    <h2 class="text-3xl font-bold text-center mb-12">创作流程</h2>
+                    <div class="steps">
+                        <div class="step completed">
+                            <div class="step-number">1</div>
+                            <div class="step-label">选择流派</div>
+                        </div>
+                        <div class="step completed">
+                            <div class="step-number">2</div>
+                            <div class="step-label">输入梗概</div>
+                        </div>
+                        <div class="step active">
+                            <div class="step-number">3</div>
+                            <div class="step-label">生成灵感</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-label">章节大纲</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">5</div>
+                            <div class="step-label">章节细纲</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">6</div>
+                            <div class="step-label">生成正文</div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-8">
+                        <a href="genre-selection.html" class="btn btn-primary">
+                            <i class="fas fa-rocket mr-2"></i> 立即体验
+                        </a>
+                    </div>
+                </section>
+
+                <!-- 用户评价 -->
+                <section class="mb-16">
+                    <h2 class="text-3xl font-bold text-center mb-12">用户评价</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="card p-6">
+                            <div class="flex items-center mb-4">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=60&q=80" alt="用户头像" class="w-12 h-12 rounded-full mr-4">
+                                <div>
+                                    <h4 class="font-bold">李小白</h4>
+                                    <div class="text-yellow-500">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-gray-600">
+                                "以前写网文总是卡文，有了这个AI助手后，灵感源源不断，三天就写出了一个完整的小说大纲，太神奇了！"
+                            </p>
+                        </div>
+                        <div class="card p-6">
+                            <div class="flex items-center mb-4">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=60&q=80" alt="用户头像" class="w-12 h-12 rounded-full mr-4">
+                                <div>
+                                    <h4 class="font-bold">王大锤</h4>
+                                    <div class="text-yellow-500">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-gray-600">
+                                "AI生成的内容质量很高，基本不需要太多修改。特别是对于新手来说，能快速上手网文创作，值得推荐！"
+                            </p>
+                        </div>
+                        <div class="card p-6">
+                            <div class="flex items-center mb-4">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=60&q=80" alt="用户头像" class="w-12 h-12 rounded-full mr-4">
+                                <div>
+                                    <h4 class="font-bold">张小丽</h4>
+                                    <div class="text-yellow-500">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-gray-600">
+                                "作为一个兼职写手，这个工具帮我节省了大量构思时间。生成的内容紧扣网文套路，读者反馈非常好！"
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 登录/注册区域 -->
+                <section class="bg-gray-100 rounded-lg p-8 mb-16">
+                    <div class="flex flex-col md:flex-row items-center">
+                        <div class="md:w-2/3 mb-6 md:mb-0 md:pr-8">
+                            <h2 class="text-2xl font-bold mb-4">加入我们，开启AI创作之旅</h2>
+                            <p class="text-gray-600 mb-4">
+                                注册即可获得免费创作额度，立即体验AI驱动的网文创作新方式。
+                            </p>
+                            <ul class="mb-4">
+                                <li class="flex items-center mb-2">
+                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                    <span>每日免费创作额度</span>
+                                </li>
+                                <li class="flex items-center mb-2">
+                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                    <span>多种网文流派支持</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                    <span>作品云端存储与管理</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="md:w-1/3">
+                            <div class="card p-6">
+                                <h3 class="text-xl font-bold mb-4 text-center">登录/注册</h3>
+                                <form>
+                                    <div class="form-group">
+                                        <label for="email" class="form-label">邮箱</label>
+                                        <input type="email" id="email" class="form-control" placeholder="请输入邮箱">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password" class="form-label">密码</label>
+                                        <input type="password" id="password" class="form-control" placeholder="请输入密码">
+                                    </div>
+                                    <button type="button" class="btn btn-primary w-full mb-4">登录</button>
+                                    <div class="text-center">
+                                        <a href="#" class="text-sm text-blue-600 hover:underline">忘记密码？</a>
+                                        <span class="mx-2 text-gray-400">|</span>
+                                        <a href="#" class="text-sm text-blue-600 hover:underline">注册账号</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- 页脚 -->
+        <footer class="bg-gray-800 text-white py-8">
+            <div class="container">
+                <div class="flex flex-col md:flex-row justify-between mb-8">
+                    <div class="mb-6 md:mb-0">
+                        <h3 class="text-xl font-bold mb-4">AI网文小说创作助手</h3>
+                        <p class="text-gray-400 max-w-md">
+                            专注于为网文作者提供AI驱动的创作辅助工具，让创作更高效，让故事更精彩。
+                        </p>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+                        <div>
+                            <h4 class="font-bold mb-4">产品</h4>
+                            <ul class="space-y-2">
+                                <li><a href="#" class="text-gray-400 hover:text-white">功能介绍</a></li>
+                                <li><a href="#" class="text-gray-400 hover:text-white">价格方案</a></li>
+                                <li><a href="#" class="text-gray-400 hover:text-white">更新日志</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold mb-4">资源</h4>
+                            <ul class="space-y-2">
+                                <li><a href="#" class="text-gray-400 hover:text-white">使用教程</a></li>
+                                <li><a href="#" class="text-gray-400 hover:text-white">创作指南</a></li>
+                                <li><a href="#" class="text-gray-400 hover:text-white">常见问题</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold mb-4">关于我们</h4>
+                            <ul class="space-y-2">
+                                <li><a href="#" class="text-gray-400 hover:text-white">公司介绍</a></li>
+                                <li><a href="#" class="text-gray-400 hover:text-white">联系我们</a></li>
+                                <li><a href="#" class="text-gray-400 hover:text-white">加入我们</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-t border-gray-700 pt-6 flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-400 mb-4 md:mb-0">© 2023 AI网文小说创作助手. 保留所有权利.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-weixin text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-weibo text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-qq text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="common.js"></script>
+</body>
+</html> 

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小说正文生成 - AI网文小说创作助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="common.css" rel="stylesheet">
+    <link href="common/creation-info-accordion.css" rel="stylesheet">
+</head>
+<body>
+    <div class="page-container">
+        <!-- 导航栏 -->
+        <nav class="navbar">
+            <div class="container navbar-container">
+                <a href="home.html" class="navbar-brand">AI网文小说创作助手</a>
+                <div class="navbar-nav">
+                    <a href="novel-list.html" class="nav-link">我的小说</a>
+                    <a href="genre-selection.html" class="nav-link active">创作中心</a>
+                    <a href="profile.html" class="nav-link">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=80&q=80" alt="用户头像" class="avatar">
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 主要内容 -->
+        <div class="container main-container">
+            <div class="content-wrapper">
+                <!-- 步骤指示器 -->
+                <div class="steps-container mb-6">
+                    <div class="steps">
+                        <div class="step completed">
+                            <div class="step-circle">1</div>
+                            <div class="step-text">选择流派</div>
+                        </div>
+                        <div class="step-connector completed"></div>
+                        <div class="step completed">
+                            <div class="step-circle">2</div>
+                            <div class="step-text">输入梗概</div>
+                        </div>
+                        <div class="step-connector completed"></div>
+                        <div class="step completed">
+                            <div class="step-circle">3</div>
+                            <div class="step-text">故事要素</div>
+                        </div>
+                        <div class="step-connector completed"></div>
+                        <div class="step completed">
+                            <div class="step-circle">4</div>
+                            <div class="step-text">章节大纲</div>
+                        </div>
+                        <div class="step-connector completed"></div>
+                        <div class="step completed">
+                            <div class="step-circle">5</div>
+                            <div class="step-text">章节细纲</div>
+                        </div>
+                        <div class="step-connector completed"></div>
+                        <div class="step active">
+                            <div class="step-circle">6</div>
+                            <div class="step-text">生成正文</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 创作信息手风琴组件 -->
+                <div id="creation-info-container">
+                    <!-- 这里将通过JavaScript动态加载创作信息手风琴组件 -->
+                </div>
+                
+                <!-- 页面主要内容 -->
+                <!-- 小说标题显示区域 -->
+                <div class="novel-title-display">
+                    <h1 id="novel-title-display" class="novel-title-text">未命名作品</h1>
+                    <button id="novel-title-edit-btn" class="novel-title-edit-btn">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </div>
+                
+                <!-- 页面标题 -->
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-center">生成小说正文</h1>
+                    <p class="text-center text-gray-600 mt-2">AI将基于章节细纲生成小说正文，您可以根据需要进行修改和优化</p>
+                </div>
+
+                <!-- 步骤导航 -->
+                <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                    <h3 class="font-bold mb-2">创作进度</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <a href="genre-selection.html" class="text-sm px-3 py-1 bg-white border rounded hover:bg-gray-100 flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-1"></i> 流派：都市-异能流
+                        </a>
+                        <a href="story-outline.html" class="text-sm px-3 py-1 bg-white border rounded hover:bg-gray-100 flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-1"></i> 梗概：已完成
+                        </a>
+                        <a href="inspiration-generation.html" class="text-sm px-3 py-1 bg-white border rounded hover:bg-gray-100 flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-1"></i> 故事要素：已完成
+                        </a>
+                        <a href="chapter-outline.html" class="text-sm px-3 py-1 bg-white border rounded hover:bg-gray-100 flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-1"></i> 章节大纲：已完成
+                        </a>
+                        <a href="detailed-outline.html" class="text-sm px-3 py-1 bg-white border rounded hover:bg-gray-100 flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-1"></i> 章节细纲：已完成
+                        </a>
+                        <span class="text-sm px-3 py-1 bg-blue-50 border border-blue-200 rounded flex items-center font-bold">
+                            <i class="fas fa-pen text-blue-500 mr-1"></i> 当前：生成正文
+                        </span>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">您可以随时点击切换到其他步骤，系统会自动保存您的进度</p>
+                </div>
+
+                <!-- 当前选择的流派和梗概 -->
+                <div class="card mb-8">
+                    <div class="card-header">
+                        <h2 class="card-title">当前创作信息</h2>
+                        <a href="story-outline.html" class="text-blue-600 hover:text-blue-800">
+                            <i class="fas fa-edit"></i> 编辑
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div class="flex items-center mb-4">
+                            <span class="tag tag-male mr-2">男频</span>
+                            <span class="font-bold">都市-异能流</span>
+                        </div>
+                        <div class="border-t pt-4">
+                            <h3 class="font-bold mb-2">故事梗概</h3>
+                            <p class="text-gray-600">
+                                大学生李天阳在一次偶然的机会下获得了一个神秘的系统，可以看到他人的情感值。从此，他的生活发生了翻天覆地的变化，不仅能够轻松应对各种人际关系，还能在危机时刻洞察他人的真实想法。在都市中游刃有余的同时，他逐渐发现这个系统背后隐藏着更大的秘密...
+                            </p>
+                        </div>
+                        <div class="border-t pt-4 mt-4">
+                            <h3 class="font-bold mb-2">故事要素</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                                <div>
+                                    <p class="font-semibold text-blue-600"><i class="fas fa-book-open mr-1"></i> 情节要素</p>
+                                    <p class="text-gray-600">意外获能、职场竞争、身份隐藏</p>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-green-600"><i class="fas fa-user mr-1"></i> 角色要素</p>
+                                    <p class="text-gray-600">平凡主角、神秘高手、隐世家族</p>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-purple-600"><i class="fas fa-cogs mr-1"></i> 设定要素</p>
+                                    <p class="text-gray-600">异能体系、隐秘组织、都市规则</p>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-yellow-600"><i class="fas fa-map-marked-alt mr-1"></i> 场景要素</p>
+                                    <p class="text-gray-600">高级写字楼、隐秘基地、能力对决</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 章节选择 -->
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold mb-4">选择章节</h2>
+                    <div class="flex overflow-x-auto pb-2 gap-2">
+                        <button class="btn btn-primary whitespace-nowrap">第1章：意外的礼物</button>
+                        <button class="btn btn-secondary whitespace-nowrap">第2章：初试能力</button>
+                        <button class="btn btn-secondary whitespace-nowrap">第3章：神秘女孩</button>
+                        <button class="btn btn-secondary whitespace-nowrap">第4章：隐秘组织</button>
+                        <button class="btn btn-secondary whitespace-nowrap">第5章：能力升级</button>
+                        <button class="btn btn-secondary whitespace-nowrap">第6章：真相浮出</button>
+                        <button class="btn btn-secondary whitespace-nowrap">第7章：最终对决</button>
+                        <button class="btn btn-secondary whitespace-nowrap">第8章：新的开始</button>
+                    </div>
+                </div>
+
+                <!-- 章节细纲 -->
+                <div class="card mb-6">
+                    <div class="card-header">
+                        <h2 class="card-title">第1章：意外的礼物 - 细纲</h2>
+                        <div class="text-sm text-gray-500">
+                            目标字数：<span id="word-count-target" class="font-bold">3000-5000</span> 字
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-gray-600 mb-4">
+                            1. 开场：李天阳在大学校园内匆忙赶往教室，途中不小心撞到一位老人。<br>
+                            2. 李天阳扶起老人，并帮助老人捡起散落的物品，老人对他的善举表示感谢。<br>
+                            3. 老人临走前送给李天阳一个看似普通的手环，称这是对他善良的回报。<br>
+                            4. 李天阳戴上手环后，发现自己能看到他人头顶上方的数值和颜色，代表不同的情感和强度。<br>
+                            5. 李天阳尝试理解这种能力，并在宿舍里对室友进行测试，确认这不是幻觉。<br>
+                            6. 第二天，李天阳在食堂遇到两名即将发生冲突的学生，通过观察他们的情感值，成功化解了冲突。<br>
+                            7. 李天阳的行为被同班女生王小美注意到，她对李天阳的突然变化感到好奇。<br>
+                            8. 李天阳开始有意识地利用这种能力帮助身边的人，同时也在思考这种能力的来源和目的。<br>
+                            9. 结尾：李天阳在校园里偶然发现一个女孩林小雨，她是唯一一个他看不到情感值的人，引起了他的极大好奇。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 生成按钮 -->
+                <div class="text-center mb-6">
+                    <button id="generate-content" class="btn btn-primary btn-lg" onclick="generateNovelContent()">
+                        <i class="fas fa-magic mr-2"></i> 生成正文
+                    </button>
+                </div>
+
+                <!-- 正文编辑区域 -->
+                <div class="card mb-8">
+                    <div class="card-header">
+                        <h2 class="card-title">正文内容</h2>
+                        <div class="flex gap-2">
+                            <button class="btn btn-sm btn-secondary">
+                                <i class="fas fa-edit"></i> 编辑
+                            </button>
+                            <button class="btn btn-sm btn-secondary">
+                                <i class="fas fa-redo"></i> 重新生成
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <textarea id="content-container" class="form-control" rows="20" placeholder="点击"生成正文"按钮，AI将为您生成小说正文"></textarea>
+                    </div>
+                </div>
+
+                <!-- 优化建议 -->
+                <div class="card mb-8">
+                    <div class="card-header">
+                        <h2 class="card-title">优化建议</h2>
+                        <button class="btn btn-sm btn-primary">
+                            <i class="fas fa-magic mr-1"></i> 一键优化
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center">
+                                    <span class="tag tag-primary mr-2">情节</span>
+                                    <span class="font-bold">爽点不足</span>
+                                </div>
+                                <button class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-times"></i> 忽略
+                                </button>
+                            </div>
+                            <p class="text-gray-600">
+                                建议在李天阳第一次使用能力时，增加一些"扮猪吃老虎"的情节，例如他可以通过观察情感值，识破某个看似强势但内心虚弱的人，从而在冲突中占据上风。
+                            </p>
+                        </div>
+                        <div class="mb-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center">
+                                    <span class="tag tag-primary mr-2">描写</span>
+                                    <span class="font-bold">场景细节不足</span>
+                                </div>
+                                <button class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-times"></i> 忽略
+                                </button>
+                            </div>
+                            <p class="text-gray-600">
+                                建议增加对校园环境的描写，如教室、食堂、宿舍等场景的细节，增强读者的代入感和沉浸感。
+                            </p>
+                        </div>
+                        <div class="mb-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center">
+                                    <span class="tag tag-primary mr-2">风格</span>
+                                    <span class="font-bold">节奏过慢</span>
+                                </div>
+                                <button class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-times"></i> 忽略
+                                </button>
+                            </div>
+                            <p class="text-gray-600">
+                                建议适当加快情节推进速度，减少过多的心理描写，增加一些紧凑的对话和行动场景，符合都市异能流的快节奏风格。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 操作按钮 -->
+                <div class="flex justify-between">
+                    <a href="detailed-outline.html" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left mr-2"></i> 上一步
+                    </a>
+                    <div class="flex gap-4">
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-save mr-2"></i> 保存草稿
+                        </button>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-check mr-2"></i> 完成创作
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="common.js"></script>
+    <script src="common/creation-info-accordion.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 加载创作信息手风琴组件
+            fetch('common/creation-info-template.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('creation-info-container').innerHTML = html;
+                    // 初始化手风琴组件
+                    initCreationInfoAccordion();
+                });
+                
+            // 其他页面特定的JavaScript保持不变
+            // ...
+        });
+    </script>
+</body>
+</html> 

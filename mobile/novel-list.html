@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>我的小说 - AI网文小说创作助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="mobile-common.css" rel="stylesheet">
+    <style>
+        /* 筛选标签滚动容器 */
+        .filter-tags-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            margin: 0 -1rem;
+            padding: 0 1rem;
+        }
+        
+        .filter-tags-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .filter-tags {
+            display: flex;
+            padding-bottom: 0.5rem;
+            white-space: nowrap;
+        }
+        
+        /* 小说卡片样式 */
+        .novel-card {
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+        
+        .novel-card:hover, .novel-card:active {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .novel-cover {
+            width: 4rem;
+            height: 5.5rem;
+            background-size: cover;
+            background-position: center;
+            border-radius: 0.375rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .novel-card:hover .novel-cover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 小说信息样式 */
+        .novel-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .novel-meta {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .novel-desc {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        /* 操作按钮样式 */
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .action-button {
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.375rem;
+            background-color: var(--bg-light);
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+        
+        .action-button:hover, .action-button:active {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* 创建新小说按钮 */
+        .create-button {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(79, 70, 229, 0.4);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .create-button:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 4px rgba(79, 70, 229, 0.4);
+        }
+        
+        /* 适配底部安全区域 */
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+            .create-button {
+                bottom: calc(1.5rem + env(safe-area-inset-bottom));
+            }
+        }
+        
+        /* 删除确认对话框 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            width: 85%;
+            max-width: 320px;
+            background-color: white;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            transform: scale(0.9);
+            transition: all 0.3s ease;
+        }
+        
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+        
+        .modal-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .modal-body {
+            padding: 1.5rem 1rem;
+        }
+        
+        .modal-footer {
+            padding: 1rem;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            border-top: 1px solid var(--border-light);
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="status-bar-left">
+                <span class="status-bar-time">9:41</span>
+            </div>
+            <div class="status-bar-right">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi ml-2"></i>
+                <i class="fas fa-battery-full ml-2 status-bar-battery"></i>
+            </div>
+        </div>
+        
+        <!-- 导航栏 -->
+        <div class="nav-bar">
+            <div class="nav-left"></div>
+            <div class="nav-title">我的小说</div>
+            <div class="nav-right">
+                <button class="flex items-center justify-center w-8 h-8">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 内容区域 -->
+        <div class="content">
+            <!-- 筛选标签 -->
+            <div class="filter-tags-container mb-4">
+                <div class="filter-tags">
+                    <button class="btn btn-primary btn-sm mr-2">全部</button>
+                    <button class="btn btn-outline btn-sm mr-2">连载中</button>
+                    <button class="btn btn-outline btn-sm mr-2">已完结</button>
+                    <button class="btn btn-outline btn-sm mr-2">男频</button>
+                    <button class="btn btn-outline btn-sm mr-2">女频</button>
+                    <button class="btn btn-outline btn-sm mr-2">玄幻</button>
+                    <button class="btn btn-outline btn-sm mr-2">都市</button>
+                    <button class="btn btn-outline btn-sm mr-2">仙侠</button>
+                </div>
+            </div>
+            
+            <!-- 小说列表 -->
+            <div class="novel-list">
+                <!-- 小说卡片 1 -->
+                <div class="card novel-card mb-3">
+                    <div class="flex p-4">
+                        <div class="novel-cover mr-3" style="background-image: url('https://images.unsplash.com/photo-1518826778770-a729fb53c3c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80')"></div>
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start">
+                                <h3 class="novel-title">情感读心者</h3>
+                                <span class="badge badge-primary">连载中</span>
+                            </div>
+                            <div class="novel-meta">都市异能 | 32,456字 | 8/30章</div>
+                            <p class="novel-desc">大学生李天阳在一次偶然的机会下获得了一个神秘的系统，可以看到他人的情感值。从此，他的生活发生了翻天覆地的变化，不仅能够轻松应对各种人际关系，还能在危机时刻洞察他人的真实想法。</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs text-secondary">3天前更新</span>
+                                <div class="action-buttons">
+                                    <a href="novel-view.html" class="action-button">
+                                        <i class="fas fa-book-open"></i>
+                                    </a>
+                                    <a href="novel-edit.html" class="action-button">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button class="action-button" onclick="showDeleteConfirm('情感读心者')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 小说卡片 2 -->
+                <div class="card novel-card mb-3">
+                    <div class="flex p-4">
+                        <div class="novel-cover mr-3" style="background-image: url('https://images.unsplash.com/photo-1511300636408-a63a89df3482?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80')"></div>
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start">
+                                <h3 class="novel-title">修真归来</h3>
+                                <span class="badge badge-success">已完结</span>
+                            </div>
+                            <div class="novel-meta">都市修真 | 128,765字 | 30/30章</div>
+                            <p class="novel-desc">叶辰在修真界修炼千年，因一场大战意外跌落凡间，重回都市。且看他如何凭借强大的修为，在都市中纵横捭阖，成就一段传奇人生。</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs text-secondary">1个月前更新</span>
+                                <div class="action-buttons">
+                                    <a href="novel-view.html" class="action-button">
+                                        <i class="fas fa-book-open"></i>
+                                    </a>
+                                    <a href="novel-edit.html" class="action-button">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button class="action-button" onclick="showDeleteConfirm('修真归来')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 小说卡片 3 -->
+                <div class="card novel-card mb-3">
+                    <div class="flex p-4">
+                        <div class="novel-cover mr-3" style="background-image: url('https://images.unsplash.com/photo-1531259683007-016a7b628fc3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80')"></div>
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start">
+                                <h3 class="novel-title">星际探索者</h3>
+                                <span class="badge badge-primary">连载中</span>
+                            </div>
+                            <div class="novel-meta">科幻 | 56,789字 | 12/40章</div>
+                            <p class="novel-desc">在未来的星际时代，人类已经开始向宇宙深处探索。主角作为一名星际探索者，带领着他的团队前往未知的星系，寻找适合人类居住的新家园。</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs text-secondary">1周前更新</span>
+                                <div class="action-buttons">
+                                    <a href="novel-view.html" class="action-button">
+                                        <i class="fas fa-book-open"></i>
+                                    </a>
+                                    <a href="novel-edit.html" class="action-button">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button class="action-button" onclick="showDeleteConfirm('星际探索者')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 创建新小说按钮 -->
+            <a href="create.html" class="create-button">
+                <i class="fas fa-plus fa-lg"></i>
+            </a>
+        </div>
+        
+        <!-- 底部导航栏 -->
+        <div class="bottom-nav">
+            <a href="home.html" class="flex flex-col items-center">
+                <i class="fas fa-home"></i>
+                <span class="text-xs mt-1">首页</span>
+            </a>
+            <a href="novel-list.html" class="flex flex-col items-center text-primary">
+                <i class="fas fa-book"></i>
+                <span class="text-xs mt-1">我的小说</span>
+            </a>
+            <a href="inspiration.html" class="flex flex-col items-center">
+                <i class="fas fa-lightbulb"></i>
+                <span class="text-xs mt-1">灵感</span>
+            </a>
+            <a href="profile.html" class="flex flex-col items-center">
+                <i class="fas fa-user"></i>
+                <span class="text-xs mt-1">我的</span>
+            </a>
+        </div>
+    </div>
+    
+    <!-- 删除确认对话框 -->
+    <div class="modal" id="delete-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="text-lg font-bold">确认删除</h3>
+            </div>
+            <div class="modal-body">
+                <p>确定要删除小说"<span id="delete-novel-name"></span>"吗？此操作不可恢复。</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="hideDeleteConfirm()">取消</button>
+                <button class="btn btn-danger" onclick="deleteNovel()">删除</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 当前要删除的小说名称
+        let currentDeleteNovel = '';
+        
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 更新状态栏时间
+            updateStatusBarTime();
+        });
+        
+        // 更新状态栏时间
+        function updateStatusBarTime() {
+            const timeElement = document.querySelector('.status-bar-time');
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            timeElement.textContent = `${hours}:${minutes}`;
+        }
+        
+        // 显示删除确认对话框
+        function showDeleteConfirm(novelName) {
+            currentDeleteNovel = novelName;
+            document.getElementById('delete-novel-name').textContent = novelName;
+            const modal = document.getElementById('delete-modal');
+            modal.classList.add('show');
+        }
+        
+        // 隐藏删除确认对话框
+        function hideDeleteConfirm() {
+            const modal = document.getElementById('delete-modal');
+            modal.classList.remove('show');
+        }
+        
+        // 删除小说
+        function deleteNovel() {
+            // 这里应该是实际的删除逻辑，现在只是模拟
+            console.log('删除小说:', currentDeleteNovel);
+            
+            // 隐藏对话框
+            hideDeleteConfirm();
+            
+            // 显示删除成功提示
+            showToast('删除成功', 'success');
+            
+            // 模拟从页面中移除小说卡片
+            setTimeout(() => {
+                const novelCards = document.querySelectorAll('.novel-card');
+                novelCards.forEach(card => {
+                    const title = card.querySelector('.novel-title').textContent;
+                    if (title === currentDeleteNovel) {
+                        card.style.opacity = '0';
+                        card.style.height = '0';
+                        card.style.marginBottom = '0';
+                        card.style.overflow = 'hidden';
+                        
+                        setTimeout(() => {
+                            card.remove();
+                        }, 300);
+                    }
+                });
+            }, 300);
+        }
+        
+        // 显示提示消息
+        function showToast(message, type = 'info', duration = 3000) {
+            // 创建toast元素
+            const toast = document.createElement('div');
+            toast.className = `fixed top-16 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-lg px-4 py-3 z-50 flex items-center max-w-xs`;
+            
+            // 设置内容
+            let icon = '';
+            let bgColor = '';
+            
+            switch (type) {
+                case 'success':
+                    icon = '<i class="fas fa-check-circle text-green-500 mr-2"></i>';
+                    bgColor = 'bg-green-50 border-l-4 border-green-500';
+                    break;
+                case 'error':
+                    icon = '<i class="fas fa-exclamation-circle text-red-500 mr-2"></i>';
+                    bgColor = 'bg-red-50 border-l-4 border-red-500';
+                    break;
+                case 'warning':
+                    icon = '<i class="fas fa-exclamation-triangle text-yellow-500 mr-2"></i>';
+                    bgColor = 'bg-yellow-50 border-l-4 border-yellow-500';
+                    break;
+                default:
+                    icon = '<i class="fas fa-info-circle text-blue-500 mr-2"></i>';
+                    bgColor = 'bg-blue-50 border-l-4 border-blue-500';
+            }
+            
+            toast.className += ` ${bgColor}`;
+            toast.innerHTML = `${icon}<span>${message}</span>`;
+            
+            // 添加到页面
+            document.body.appendChild(toast);
+            
+            // 显示动画
+            setTimeout(() => {
+                toast.style.opacity = '1';
+                toast.style.transform = 'translate(-50%, 0)';
+            }, 10);
+            
+            // 自动关闭
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translate(-50%, -20px)';
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, duration);
+        }
+    </script>
+</body>
+</html> 

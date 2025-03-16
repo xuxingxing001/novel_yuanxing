@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>小说编辑 - AI网文小说创作助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="mobile-common.css" rel="stylesheet">
+    <link href="novel-edit-styles.css" rel="stylesheet">
+    <style>
+        /* 底部按钮区域 */
+        .bottom-buttons {
+            position: fixed;
+            bottom: 60px;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background-color: white;
+            border-top: 1px solid #e2e8f0;
+            z-index: 10;
+            /* 适配iPhone底部安全区域 */
+            padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0));
+        }
+        
+        @media (min-width: 768px) {
+            .bottom-buttons {
+                width: 370px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-bottom-left-radius: 34px;
+                border-bottom-right-radius: 34px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="status-bar-left">
+                <span class="status-bar-time">9:41</span>
+            </div>
+            <div class="status-bar-right">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi ml-2"></i>
+                <i class="fas fa-battery-full ml-2 status-bar-battery"></i>
+            </div>
+        </div>
+        
+        <!-- 导航栏 -->
+        <div class="nav-bar">
+            <div class="nav-left">
+                <a href="novel-list.html">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </div>
+            <div class="nav-title">情感读心者</div>
+            <div class="nav-right">
+                <button id="edit-novel-btn" class="p-2">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 内容区域 -->
+        <div class="content">
+            <!-- 小说信息卡片 -->
+            <div class="novel-info-card">
+                <div class="novel-info-header">
+                    <div id="novel-cover" class="novel-cover" style="background-image: url('https://images.unsplash.com/photo-1518826778770-a729fb53c3c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80')"></div>
+                    <div class="novel-details">
+                        <div>
+                            <h1 id="novel-title" class="novel-title">情感读心者</h1>
+                            <div class="novel-meta">
+                                <span id="novel-genre">都市异能</span> | <span id="novel-status">连载中</span>
+                            </div>
+                        </div>
+                        <div class="novel-stats">
+                            <div class="novel-stat">
+                                <i class="fas fa-file-alt"></i> <span id="novel-word-count">32,456</span>字
+                            </div>
+                            <div class="novel-stat">
+                                <i class="fas fa-list"></i> <span id="novel-chapter-count">8</span>章
+                            </div>
+                            <div class="novel-stat">
+                                <i class="fas fa-clock"></i> <span id="novel-update-time">2023-06-15</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="novel-info-body">
+                    <p id="novel-description" class="novel-description">
+                        大学生李天阳在一次偶然的机会下获得了一个神秘的系统，可以看到他人的情感值。从此，他的生活发生了翻天覆地的变化，不仅能够轻松应对各种人际关系，还能在危机时刻洞察他人的真实想法。在都市中游刃有余的同时，他逐渐发现这个系统背后隐藏着更大的秘密...
+                    </p>
+                </div>
+            </div>
+            
+            <!-- 章节列表 -->
+            <div id="chapter-list-container">
+                <div class="chapter-list-header">
+                    <div class="chapter-list-title">
+                        <i class="fas fa-list"></i> 章节列表
+                    </div>
+                    <div class="chapter-list-actions">
+                        <button id="sort-chapters-btn" class="btn btn-sm btn-outline">
+                            <i class="fas fa-sort"></i> 排序
+                        </button>
+                        <button id="sort-done-btn" class="btn btn-sm btn-primary hidden">
+                            <i class="fas fa-check"></i> 完成
+                        </button>
+                    </div>
+                </div>
+                <div id="chapter-list">
+                    <!-- 章节列表将通过JavaScript动态加载 -->
+                </div>
+            </div>
+            
+            <!-- 添加章节按钮 -->
+            <a id="add-chapter-btn" class="add-chapter-btn">
+                <i class="fas fa-plus"></i>
+            </a>
+        </div>
+        
+        <!-- 添加章节模态框 -->
+        <div id="add-chapter-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">添加新章节</div>
+                    <button id="add-chapter-close" class="modal-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form id="add-chapter-form">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="chapter-title-input" class="form-label">章节标题</label>
+                            <input type="text" id="chapter-title-input" class="form-control" placeholder="例如：第四章 危机初现">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline" id="add-chapter-cancel">取消</button>
+                        <button type="submit" class="btn btn-primary">创建并编辑</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- 编辑小说信息模态框 -->
+        <div id="edit-novel-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">编辑小说信息</div>
+                    <button id="edit-novel-close" class="modal-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form id="edit-novel-form">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="novel-title-input" class="form-label">小说标题</label>
+                            <input type="text" id="novel-title-input" class="form-control" placeholder="输入小说标题">
+                        </div>
+                        <div class="form-group">
+                            <label for="novel-genre-input" class="form-label">小说类型</label>
+                            <input type="text" id="novel-genre-input" class="form-control" placeholder="例如：都市异能">
+                        </div>
+                        <div class="form-group">
+                            <label for="novel-status-input" class="form-label">连载状态</label>
+                            <select id="novel-status-input" class="form-control">
+                                <option value="连载中">连载中</option>
+                                <option value="已完结">已完结</option>
+                                <option value="暂停更新">暂停更新</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="novel-description-input" class="form-label">小说简介</label>
+                            <textarea id="novel-description-input" class="form-control" rows="4" placeholder="输入小说简介"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline" id="edit-novel-cancel">取消</button>
+                        <button type="submit" class="btn btn-primary">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="mobile-common.js"></script>
+    <script src="novel-edit-functions.js"></script>
+</body>
+</html> 

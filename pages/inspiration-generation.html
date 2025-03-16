@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>故事要素细化 - AI网文小说创作助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="common.css" rel="stylesheet">
+    <link href="common/creation-info-accordion.css" rel="stylesheet">
+    <style>
+        .inspiration-card {
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .inspiration-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-right: 6px;
+            margin-bottom: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .tag:hover {
+            transform: scale(1.05);
+        }
+        
+        .tag.selected {
+            font-weight: bold;
+        }
+        
+        .tag-male {
+            background-color: var(--color-male-light);
+            color: var(--color-male);
+            border: 1px solid var(--color-male);
+        }
+        
+        .tag-female {
+            background-color: var(--color-female-light);
+            color: var(--color-female);
+            border: 1px solid var(--color-female);
+        }
+        
+        .custom-input {
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+            padding: 8px;
+            transition: all 0.3s;
+        }
+        
+        .custom-input:focus-within {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.2);
+        }
+        
+        .element-section {
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            transition: all 0.3s;
+        }
+        
+        .element-section:hover {
+            background-color: #f3f4f6;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <!-- 导航栏 -->
+        <nav class="navbar">
+            <div class="container navbar-container">
+                <a href="home.html" class="navbar-brand">AI网文小说创作助手</a>
+                <div class="navbar-nav">
+                    <a href="novel-list.html" class="nav-link">我的小说</a>
+                    <a href="genre-selection.html" class="nav-link active">创作中心</a>
+                    <a href="profile.html" class="nav-link">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=80&q=80" alt="用户头像" class="avatar">
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 主要内容 -->
+        <div class="container main-container">
+            <div class="content-wrapper">
+                <!-- 步骤指示器 -->
+                <div class="steps-container mb-6">
+                    <div class="steps">
+                        <div class="step completed">
+                            <div class="step-circle">1</div>
+                            <div class="step-text">选择流派</div>
+                        </div>
+                        <div class="step-connector completed"></div>
+                        <div class="step completed">
+                            <div class="step-circle">2</div>
+                            <div class="step-text">输入梗概</div>
+                        </div>
+                        <div class="step-connector completed"></div>
+                        <div class="step active">
+                            <div class="step-circle">3</div>
+                            <div class="step-text">故事要素</div>
+                        </div>
+                        <div class="step-connector"></div>
+                        <div class="step">
+                            <div class="step-circle">4</div>
+                            <div class="step-text">章节大纲</div>
+                        </div>
+                        <div class="step-connector"></div>
+                        <div class="step">
+                            <div class="step-circle">5</div>
+                            <div class="step-text">章节细纲</div>
+                        </div>
+                        <div class="step-connector"></div>
+                        <div class="step">
+                            <div class="step-circle">6</div>
+                            <div class="step-text">生成正文</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 创作信息手风琴组件 -->
+                <div id="creation-info-container">
+                    <!-- 这里将通过JavaScript动态加载创作信息手风琴组件 -->
+                </div>
+                
+                <!-- 页面主要内容 -->
+                <!-- 小说标题显示区域 -->
+                <div class="novel-title-display">
+                    <h1 id="novel-title-display" class="novel-title-text">未命名作品</h1>
+                    <button id="novel-title-edit-btn" class="novel-title-edit-btn">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </div>
+                
+                <!-- 步骤条 -->
+                <div class="steps">
+                    <div class="step completed">
+                        <div class="step-number">1</div>
+                        <div class="step-label">选择流派</div>
+                    </div>
+                    <div class="step completed">
+                        <div class="step-number">2</div>
+                        <div class="step-label">输入梗概</div>
+                    </div>
+                    <div class="step active">
+                        <div class="step-number">3</div>
+                        <div class="step-label">故事要素</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-label">章节大纲</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-label">章节细纲</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">6</div>
+                        <div class="step-label">生成正文</div>
+                    </div>
+                </div>
+
+                <!-- 页面标题 -->
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-center">故事要素</h1>
+                    <p class="text-center text-gray-600 mt-2">AI已根据您的梗概生成以下故事要素，您可以进行修改</p>
+                </div>
+
+                <!-- 步骤导航 -->
+                <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                    <h3 class="font-bold mb-2">创作进度</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <a href="genre-selection.html" class="text-sm px-3 py-1 bg-white border rounded hover:bg-gray-100 flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-1"></i> 流派：都市-异能流
+                        </a>
+                        <a href="story-outline.html" class="text-sm px-3 py-1 bg-white border rounded hover:bg-gray-100 flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-1"></i> 梗概：已完成
+                        </a>
+                        <span class="text-sm px-3 py-1 bg-blue-50 border border-blue-200 rounded flex items-center font-bold">
+                            <i class="fas fa-pen text-blue-500 mr-1"></i> 当前：故事要素
+                        </span>
+                        <a href="chapter-outline.html" class="text-sm px-3 py-1 bg-white border rounded hover:bg-gray-100 flex items-center opacity-75">
+                            <i class="fas fa-circle text-gray-300 mr-1"></i> 下一步：章节大纲
+                        </a>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">您可以随时点击切换到其他步骤，系统会自动保存您的进度</p>
+                </div>
+
+                <!-- 当前选择的流派 -->
+                <div class="card mb-6">
+                    <div class="card-header">
+                        <h2 class="card-title">当前选择</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="flex items-center">
+                            <span id="selected-channel-tag" class="tag tag-male mr-2">男频</span>
+                            <span id="selected-genre" class="font-bold">都市-异能流</span>
+                        </div>
+                        <p id="selected-description" class="text-gray-600 mt-2">
+                            主角在都市中获得超能力，逆袭崛起，成为人生赢家。这类小说通常包含职场、学校等现实场景，同时融入超自然能力元素。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 创作元素选择 -->
+                <div class="mb-8">
+                    <div class="grid grid-cols-1 gap-6">
+                        <!-- 情节元素 -->
+                        <div class="element-section p-4">
+                            <h3 class="text-xl font-bold mb-4 flex items-center">
+                                <i class="fas fa-book-open mr-2 text-blue-500"></i> 情节元素
+                            </h3>
+                            <div class="mb-4">
+                                <p class="text-gray-700 mb-2">选择预设情节标签（可多选）：</p>
+                                <div id="plot-tags" class="flex flex-wrap">
+                                    <!-- 预设情节标签由JS动态生成 -->
+                                    <span class="tag tag-male">逆袭崛起</span>
+                                    <span class="tag tag-male">身份隐藏</span>
+                                    <span class="tag tag-male">意外获能</span>
+                                    <span class="tag tag-male">职场竞争</span>
+                                    <span class="tag tag-male">复仇</span>
+                                    <span class="tag tag-male">守护</span>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-gray-700 mb-2">自定义情节需求：</p>
+                                <div class="custom-input">
+                                    <textarea id="custom-plot" class="w-full p-2 border-0 focus:outline-none bg-transparent" rows="2" placeholder="描述您期望的情节发展，如：主角从普通白领到商业大亨的崛起过程..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 角色元素 -->
+                        <div class="element-section p-4">
+                            <h3 class="text-xl font-bold mb-4 flex items-center">
+                                <i class="fas fa-user mr-2 text-green-500"></i> 角色元素
+                            </h3>
+                            <div class="mb-4">
+                                <p class="text-gray-700 mb-2">选择预设角色类型（可多选）：</p>
+                                <div id="character-tags" class="flex flex-wrap">
+                                    <!-- 预设角色标签由JS动态生成 -->
+                                    <span class="tag tag-male">平凡主角</span>
+                                    <span class="tag tag-male">神秘高手</span>
+                                    <span class="tag tag-male">商业精英</span>
+                                    <span class="tag tag-male">隐世家族</span>
+                                    <span class="tag tag-male">对手</span>
+                                    <span class="tag tag-male">红颜知己</span>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-gray-700 mb-2">自定义角色需求：</p>
+                                <div class="custom-input">
+                                    <textarea id="custom-character" class="w-full p-2 border-0 focus:outline-none bg-transparent" rows="2" placeholder="描述您期望的角色特点，如：有特殊能力但隐藏身份的都市白领..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 设定元素 -->
+                        <div class="element-section p-4">
+                            <h3 class="text-xl font-bold mb-4 flex items-center">
+                                <i class="fas fa-cogs mr-2 text-purple-500"></i> 设定元素
+                            </h3>
+                            <div class="mb-4">
+                                <p class="text-gray-700 mb-2">选择预设设定类型（可多选）：</p>
+                                <div id="setting-tags" class="flex flex-wrap">
+                                    <!-- 预设设定标签由JS动态生成 -->
+                                    <span class="tag tag-male">异能体系</span>
+                                    <span class="tag tag-male">隐秘组织</span>
+                                    <span class="tag tag-male">商业帝国</span>
+                                    <span class="tag tag-male">都市规则</span>
+                                    <span class="tag tag-male">特殊职业</span>
+                                    <span class="tag tag-male">家族势力</span>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-gray-700 mb-2">自定义设定需求：</p>
+                                <div class="custom-input">
+                                    <textarea id="custom-setting" class="w-full p-2 border-0 focus:outline-none bg-transparent" rows="2" placeholder="描述您期望的世界设定，如：现代都市中存在的异能者组织与能力分级..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 场景元素 -->
+                        <div class="element-section p-4">
+                            <h3 class="text-xl font-bold mb-4 flex items-center">
+                                <i class="fas fa-map-marked-alt mr-2 text-yellow-500"></i> 场景元素
+                            </h3>
+                            <div class="mb-4">
+                                <p class="text-gray-700 mb-2">选择预设场景类型（可多选）：</p>
+                                <div id="scene-tags" class="flex flex-wrap">
+                                    <!-- 预设场景标签由JS动态生成 -->
+                                    <span class="tag tag-male">高级写字楼</span>
+                                    <span class="tag tag-male">豪华会所</span>
+                                    <span class="tag tag-male">隐秘基地</span>
+                                    <span class="tag tag-male">都市暗角</span>
+                                    <span class="tag tag-male">商业谈判</span>
+                                    <span class="tag tag-male">能力对决</span>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-gray-700 mb-2">自定义场景需求：</p>
+                                <div class="custom-input">
+                                    <textarea id="custom-scene" class="w-full p-2 border-0 focus:outline-none bg-transparent" rows="2" placeholder="描述您期望的场景特点，如：都市高楼之间的异能者对决..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 对话元素 -->
+                        <div class="element-section p-4">
+                            <h3 class="text-xl font-bold mb-4 flex items-center">
+                                <i class="fas fa-comments mr-2 text-red-500"></i> 对话元素
+                            </h3>
+                            <div class="mb-4">
+                                <p class="text-gray-700 mb-2">选择预设对话风格（可多选）：</p>
+                                <div id="dialogue-tags" class="flex flex-wrap">
+                                    <!-- 预设对话标签由JS动态生成 -->
+                                    <span class="tag tag-male">简洁有力</span>
+                                    <span class="tag tag-male">商场博弈</span>
+                                    <span class="tag tag-male">能力解释</span>
+                                    <span class="tag tag-male">身份试探</span>
+                                    <span class="tag tag-male">冲突对峙</span>
+                                    <span class="tag tag-male">指点迷津</span>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-gray-700 mb-2">自定义对话需求：</p>
+                                <div class="custom-input">
+                                    <textarea id="custom-dialogue" class="w-full p-2 border-0 focus:outline-none bg-transparent" rows="2" placeholder="描述您期望的对话特点，如：主角与对手的商业谈判中暗藏机锋..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 生成按钮 -->
+                <div class="flex justify-center mb-8">
+                    <button id="generate-btn" class="btn btn-primary btn-lg">
+                        <i class="fas fa-magic mr-2"></i> 细化故事要素
+                    </button>
+                </div>
+
+                <!-- 生成结果 -->
+                <div id="result-container" class="mb-8 hidden">
+                    <h2 class="text-2xl font-bold mb-4">故事要素细化结果</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- 情节要素 -->
+                        <div class="inspiration-card bg-white p-4">
+                            <h3 class="text-lg font-bold mb-2 flex items-center">
+                                <i class="fas fa-book-open mr-2 text-blue-500"></i> 情节要素
+                            </h3>
+                            <p id="plot-inspiration" class="text-gray-700">
+                                <!-- 情节要素内容 -->
+                            </p>
+                        </div>
+
+                        <!-- 角色要素 -->
+                        <div class="inspiration-card bg-white p-4">
+                            <h3 class="text-lg font-bold mb-2 flex items-center">
+                                <i class="fas fa-user mr-2 text-green-500"></i> 角色要素
+                            </h3>
+                            <p id="character-inspiration" class="text-gray-700">
+                                <!-- 角色要素内容 -->
+                            </p>
+                        </div>
+
+                        <!-- 设定要素 -->
+                        <div class="inspiration-card bg-white p-4">
+                            <h3 class="text-lg font-bold mb-2 flex items-center">
+                                <i class="fas fa-cogs mr-2 text-purple-500"></i> 设定要素
+                            </h3>
+                            <p id="setting-inspiration" class="text-gray-700">
+                                <!-- 设定要素内容 -->
+                            </p>
+                        </div>
+
+                        <!-- 场景要素 -->
+                        <div class="inspiration-card bg-white p-4">
+                            <h3 class="text-lg font-bold mb-2 flex items-center">
+                                <i class="fas fa-map-marked-alt mr-2 text-yellow-500"></i> 场景要素
+                            </h3>
+                            <p id="scene-inspiration" class="text-gray-700">
+                                <!-- 场景要素内容 -->
+                            </p>
+                        </div>
+
+                        <!-- 对话要素 -->
+                        <div class="inspiration-card bg-white p-4 md:col-span-2">
+                            <h3 class="text-lg font-bold mb-2 flex items-center">
+                                <i class="fas fa-comments mr-2 text-red-500"></i> 对话要素
+                            </h3>
+                            <p id="dialogue-inspiration" class="text-gray-700">
+                                <!-- 对话要素内容 -->
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 操作按钮 -->
+                <div class="flex justify-between">
+                    <a href="story-outline.html" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left mr-2"></i> 上一步
+                    </a>
+                    <a href="chapter-outline.html" class="btn btn-primary">
+                        <i class="fas fa-arrow-right mr-2"></i> 下一步
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="common.js"></script>
+    <script src="common/creation-info-accordion.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 加载创作信息手风琴组件
+            fetch('common/creation-info-template.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('creation-info-container').innerHTML = html;
+                    // 初始化手风琴组件
+                    initCreationInfoAccordion();
+                });
+            
+            // 初始化小说标题
+            initNovelTitle();
+            
+            // 初始化标签选择功能
+            initTagSelection();
+            
+            // 根据当前选择的流派更新预设标签
+            updatePresetTags();
+            
+            // 生成按钮点击事件
+            document.getElementById('generate-btn').addEventListener('click', generateInspiration);
+        });
+        
+        // 初始化标签选择功能
+        function initTagSelection() {
+            document.querySelectorAll('.tag').forEach(tag => {
+                tag.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                });
+            });
+        }
+        
+        // 根据当前选择的流派更新预设标签
+        function updatePresetTags() {
+            const channel = document.getElementById('selected-channel-tag').textContent;
+            const genre = document.getElementById('selected-genre').textContent;
+            
+            // 调用工具函数更新各元素的预设标签
+            updateElementTags('plot', channel, genre);
+            updateElementTags('character', channel, genre);
+            updateElementTags('setting', channel, genre);
+            updateElementTags('scene', channel, genre);
+            updateElementTags('dialogue', channel, genre);
+        }
+        
+        // 生成灵感
+        function generateInspiration() {
+            // 显示结果容器
+            document.getElementById('result-container').classList.remove('hidden');
+            
+            // 获取所有选中的标签和自定义输入
+            const plotTags = getSelectedTags('plot-tags');
+            const characterTags = getSelectedTags('character-tags');
+            const settingTags = getSelectedTags('setting-tags');
+            const sceneTags = getSelectedTags('scene-tags');
+            const dialogueTags = getSelectedTags('dialogue-tags');
+            
+            const customPlot = document.getElementById('custom-plot').value;
+            const customCharacter = document.getElementById('custom-character').value;
+            const customSetting = document.getElementById('custom-setting').value;
+            const customScene = document.getElementById('custom-scene').value;
+            const customDialogue = document.getElementById('custom-dialogue').value;
+            
+            // 获取当前选择的频道和流派
+            const channel = document.getElementById('selected-channel-tag').textContent;
+            const genre = document.getElementById('selected-genre').textContent;
+            
+            // 调用API生成灵感（这里用模拟数据）
+            // 实际项目中应该调用后端API
+            simulateInspirationGeneration(
+                channel, genre,
+                plotTags, customPlot,
+                characterTags, customCharacter,
+                settingTags, customSetting,
+                sceneTags, customScene,
+                dialogueTags, customDialogue
+            );
+        }
+        
+        // 获取选中的标签
+        function getSelectedTags(containerId) {
+            const tags = [];
+            document.querySelectorAll(`#${containerId} .tag.selected`).forEach(tag => {
+                tags.push(tag.textContent);
+            });
+            return tags;
+        }
+        
+        // 模拟灵感生成（实际项目中应该调用后端API）
+        function simulateInspirationGeneration(
+            channel, genre,
+            plotTags, customPlot,
+            characterTags, customCharacter,
+            settingTags, customSetting,
+            sceneTags, customScene,
+            dialogueTags, customDialogue
+        ) {
+            // 模拟加载
+            document.getElementById('plot-inspiration').textContent = '正在生成...';
+            document.getElementById('character-inspiration').textContent = '正在生成...';
+            document.getElementById('setting-inspiration').textContent = '正在生成...';
+            document.getElementById('scene-inspiration').textContent = '正在生成...';
+            document.getElementById('dialogue-inspiration').textContent = '正在生成...';
+            
+            // 模拟延迟
+            setTimeout(() => {
+                // 这里应该是实际的API调用结果
+                // 以下是模拟数据
+                if (channel === '男频' && genre.includes('都市')) {
+                    document.getElementById('plot-inspiration').textContent = 
+                        '主角李明原本是一家小公司的普通职员，在一次意外中获得了能够短暂预知未来的异能。他利用这个能力在职场中逐渐崛起，同时发现公司内部隐藏着一个神秘组织，而这个组织似乎与他的异能来源有关...';
+                    
+                    document.getElementById('character-inspiration').textContent = 
+                        '主角李明：28岁，性格沉稳，获得异能后逐渐自信。\n对手王总：公司高管，表面和善实则狡诈，暗中领导神秘组织。\n盟友小林：IT部门同事，技术天才，意外发现主角的秘密并选择帮助他。\n神秘人物：偶尔出现的黑衣人，似乎知道主角能力的来源。';
+                    
+                    document.getElementById('setting-inspiration').textContent = 
+                        '异能设定：能够预知未来5-10分钟的能力，但每次使用后需要冷却时间，且使用频率过高会导致头痛。\n组织设定：名为"视界"的秘密组织，一直在寻找和收集拥有特殊能力的人，有着严密的等级制度。\n世界观：表面上是普通现代都市，实则暗藏各种拥有异能的人，他们大多隐藏在普通人中间。';
+                    
+                    document.getElementById('scene-inspiration').textContent = 
+                        '关键商谈：在公司顶层会议室的重要谈判，主角利用预知能力看穿对手底牌。\n能力觉醒：深夜加班时的办公室，主角第一次体验预知能力的场景。\n组织据点：城市郊区的一栋不起眼的办公楼，实则是"视界"组织的秘密基地，内部设施先进。\n对决场景：城市高楼之间的天台，主角与组织成员的第一次正面冲突。';
+                    
+                    document.getElementById('dialogue-inspiration').textContent = 
+                        '能力觉醒对话：\n"这不可能...我刚才是看到了未来吗？"\n"不，也许只是巧合，或者我太累了..."\n[手机铃声响起，与预见中完全一致]\n"天啊，这到底是怎么回事？"\n\n与对手对话：\n"李明，你最近的表现很出色，但你是怎么做到的？"\n"只是运气好，王总。"\n"运气？我不这么认为。有些人的\'运气\'，背后往往有着不为人知的秘密。"';
+                }
+                else {
+                    // 其他类型的模拟数据...
+                    document.getElementById('plot-inspiration').textContent = 
+                        '根据您选择的元素，这里将生成相应的情节要素...';
+                    
+                    document.getElementById('character-inspiration').textContent = 
+                        '根据您选择的元素，这里将生成相应的角色要素...';
+                    
+                    document.getElementById('setting-inspiration').textContent = 
+                        '根据您选择的元素，这里将生成相应的设定要素...';
+                    
+                    document.getElementById('scene-inspiration').textContent = 
+                        '根据您选择的元素，这里将生成相应的场景要素...';
+                    
+                    document.getElementById('dialogue-inspiration').textContent = 
+                        '根据您选择的元素，这里将生成相应的对话要素...';
+                }
+            }, 1500);
+        }
+    </script>
+</body>
+</html> 

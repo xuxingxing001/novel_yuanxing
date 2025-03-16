@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>选择流派 - AI网文小说创作助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="mobile-common.css" rel="stylesheet">
+    <style>
+        /* 滚动式步骤条样式 */
+        .steps-scroller-container {
+            position: relative;
+            overflow: hidden;
+            margin: 1rem 0;
+            padding: 0 0.5rem;
+        }
+        
+        .steps-scroller {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding: 0.5rem 0;
+            margin: 0 -0.5rem;
+        }
+        
+        .steps-scroller::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .step-item {
+            flex: 0 0 auto;
+            width: 80px;
+            scroll-snap-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 0.25rem;
+        }
+        
+        .step-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+            position: relative;
+            background-color: #e5e7eb;
+            color: #6b7280;
+            transition: all 0.3s ease;
+        }
+        
+        .step-circle.completed {
+            background-color: #10b981;
+            color: white;
+        }
+        
+        .step-circle.active {
+            background-color: #6366f1;
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.4);
+        }
+        
+        .step-label {
+            font-size: 0.7rem;
+            text-align: center;
+            color: #6b7280;
+            max-width: 100%;
+            white-space: normal;
+            line-height: 1.2;
+        }
+        
+        .step-item.completed .step-label,
+        .step-item.active .step-label {
+            color: #374151;
+            font-weight: 600;
+        }
+        
+        .step-connector {
+            position: absolute;
+            top: 25px;
+            left: 50px;
+            height: 2px;
+            background-color: #e5e7eb;
+            z-index: -1;
+            transition: background-color 0.3s ease;
+        }
+        
+        .step-connector.filled {
+            background-color: #10b981;
+        }
+        
+        .scroll-arrow {
+            position: absolute;
+            top: 15px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+        
+        .scroll-arrow:active {
+            transform: scale(0.95);
+            background-color: rgba(245, 245, 245, 0.9);
+        }
+        
+        .scroll-left {
+            left: 0.5rem;
+        }
+        
+        .scroll-right {
+            right: 0.5rem;
+        }
+        
+        /* 频道选择按钮样式 */
+        .btn-male {
+            background-color: #3b82f6;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-male:active {
+            background-color: #2563eb;
+        }
+        
+        .btn-female {
+            background-color: #ec4899;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-female:active {
+            background-color: #db2777;
+        }
+        
+        /* 流派卡片样式 */
+        .genre-card {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .genre-card.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(79, 70, 229, 0.05);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* 子流派容器样式 */
+        .sub-genre-container {
+            margin-top: 1.5rem;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* 下一步按钮样式 */
+        .next-button {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 1rem;
+            right: 1rem;
+            padding: 0.75rem;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.4);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .next-button:disabled {
+            background-color: var(--secondary-light);
+            box-shadow: none;
+        }
+        
+        .next-button:active:not(:disabled) {
+            transform: translateY(2px);
+            box-shadow: 0 2px 4px -1px rgba(79, 70, 229, 0.4);
+        }
+        
+        /* 适配底部安全区域 */
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+            .next-button {
+                bottom: calc(1.5rem + env(safe-area-inset-bottom));
+            }
+        }
+        
+        /* 底部按钮区域 */
+        .bottom-buttons {
+            position: fixed;
+            bottom: 60px;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background-color: white;
+            border-top: 1px solid #e2e8f0;
+            z-index: 10;
+            /* 适配iPhone底部安全区域 */
+            padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0));
+        }
+        
+        @media (min-width: 768px) {
+            .bottom-buttons {
+                width: 370px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-bottom-left-radius: 34px;
+                border-bottom-right-radius: 34px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="status-bar-left">
+                <span class="status-bar-time">9:41</span>
+            </div>
+            <div class="status-bar-right">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi ml-2"></i>
+                <i class="fas fa-battery-full ml-2 status-bar-battery"></i>
+            </div>
+        </div>
+        
+        <!-- 导航栏 -->
+        <div class="nav-bar">
+            <div class="nav-left">
+                <a href="create.html" class="flex items-center justify-center w-8 h-8">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </div>
+            <div class="nav-title">选择流派</div>
+            <div class="nav-right"></div>
+        </div>
+        
+        <!-- 内容区域 -->
+        <div class="content">
+            <!-- 滚动式步骤条 -->
+            <div class="steps-scroller-container">
+                <button class="scroll-arrow scroll-left hidden" id="scroll-left">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                
+                <div class="steps-scroller" id="steps-scroller">
+                    <div class="step-item active">
+                        <div class="step-circle active">
+                            <span>1</span>
+                        </div>
+                        <div class="step-label">选择流派</div>
+                    </div>
+                    
+                    <div class="step-connector" style="width: 80px;"></div>
+                    
+                    <div class="step-item">
+                        <div class="step-circle">
+                            <span>2</span>
+                        </div>
+                        <div class="step-label">输入梗概</div>
+                    </div>
+                    
+                    <div class="step-connector" style="width: 80px;"></div>
+                    
+                    <div class="step-item">
+                        <div class="step-circle">
+                            <span>3</span>
+                        </div>
+                        <div class="step-label">故事要素</div>
+                    </div>
+                    
+                    <div class="step-connector" style="width: 80px;"></div>
+                    
+                    <div class="step-item">
+                        <div class="step-circle">
+                            <span>4</span>
+                        </div>
+                        <div class="step-label">章节大纲</div>
+                    </div>
+                    
+                    <div class="step-connector" style="width: 80px;"></div>
+                    
+                    <div class="step-item">
+                        <div class="step-circle">
+                            <span>5</span>
+                        </div>
+                        <div class="step-label">章节细纲</div>
+                    </div>
+                    
+                    <div class="step-connector" style="width: 80px;"></div>
+                    
+                    <div class="step-item">
+                        <div class="step-circle">
+                            <span>6</span>
+                        </div>
+                        <div class="step-label">生成正文</div>
+                    </div>
+                </div>
+                
+                <button class="scroll-arrow scroll-right" id="scroll-right">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            
+            <!-- 频道选择 -->
+            <div class="mb-4">
+                <h2 class="text-lg font-bold mb-3">选择频道</h2>
+                <div class="flex space-x-3">
+                    <button id="male-button" class="btn-male flex-1 py-3 rounded-lg font-bold" onclick="toggleGenreType('male')">
+                        <i class="fas fa-mars mr-2"></i> 男频
+                    </button>
+                    <button id="female-button" class="btn-secondary flex-1 py-3 rounded-lg font-bold" onclick="toggleGenreType('female')">
+                        <i class="fas fa-venus mr-2"></i> 女频
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 流派选择 - 男频 -->
+            <div id="male-genres" class="mb-4">
+                <h2 class="text-lg font-bold mb-3">选择流派</h2>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="card genre-card p-4 hover:shadow-md transition-shadow cursor-pointer" onclick="selectGenre(this)">
+                        <div class="flex items-center mb-2">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-3">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <h3 class="font-bold">都市</h3>
+                        </div>
+                        <p class="text-xs text-secondary">现代都市背景下的故事，主角通常拥有特殊能力或机遇</p>
+                    </div>
+                    
+                    <div class="card genre-card p-4 hover:shadow-md transition-shadow cursor-pointer" onclick="selectGenre(this)">
+                        <div class="flex items-center mb-2">
+                            <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 mr-3">
+                                <i class="fas fa-dragon"></i>
+                            </div>
+                            <h3 class="font-bold">玄幻</h3>
+                        </div>
+                        <p class="text-xs text-secondary">架空世界中的奇幻冒险，通常包含修炼体系和超凡能力</p>
+                    </div>
+                    
+                    <div class="card genre-card p-4 hover:shadow-md transition-shadow cursor-pointer" onclick="selectGenre(this)">
+                        <div class="flex items-center mb-2">
+                            <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-3">
+                                <i class="fas fa-mountain"></i>
+                            </div>
+                            <h3 class="font-bold">仙侠</h3>
+                        </div>
+                        <p class="text-xs text-secondary">中国传统仙道文化背景，主角修仙问道，追求长生</p>
+                    </div>
+                    
+                    <div class="card genre-card p-4 hover:shadow-md transition-shadow cursor-pointer" onclick="selectGenre(this)">
+                        <div class="flex items-center mb-2">
+                            <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 mr-3">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <h3 class="font-bold">科幻</h3>
+                        </div>
+                        <p class="text-xs text-secondary">未来科技世界的故事，探索科学与人性的边界</p>
+                    </div>
+                    
+                    <div class="card genre-card p-4 hover:shadow-md transition-shadow cursor-pointer" onclick="selectGenre(this)">
+                        <div class="flex items-center mb-2">
+                            <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 mr-3">
+                                <i class="fas fa-landmark"></i>
+                            </div>
+                            <h3 class="font-bold">历史</h3>
+                        </div>
+                        <p class="text-xs text-secondary">历史背景下的故事，主角在历史长河中谱写传奇</p>
+                    </div>
+                    
+                    <div class="card genre-card p-4 hover:shadow-md transition-shadow cursor-pointer" onclick="selectGenre(this)">
+                        <div class="flex items-center mb-2">
+                            <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600 mr-3">
+                                <i class="fas fa-gamepad"></i>
+                            </div>
+                            <h3 class="font-bold">游戏</h3>
+                        </div>
+                        <p class="text-xs text-secondary">游戏世界中的冒险，主角在虚拟与现实间穿梭</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 流派选择 - 女频 -->
+            <div id="female-genres" class="mb-4 hidden">
+                <h2 class="text-lg font-bold mb-3">选择流派</h2>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="card genre-card p-4 hover:shadow-md transition-shadow cursor-pointer" onclick="selectGenre(this)">
+                        <div class="flex items-center mb-2">
+                            <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-3">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <h3 class="font-bold">现代言情</h3>
+                        </div>
+                        <p class="text-xs text-secondary">现代都市中的爱情故事，通常包含职场、豪门等元素</p>
+                    </div>
+                    
+                    <div class="card genre-card p-4 hover:shadow-md transition-shadow cursor-pointer" onclick="selectGenre(this)">
+                        <div class="flex items-center mb-2">
+                            <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600 mr-3">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                            <h3 class="font-bold">古代言情</h3>
+                        </div>
+                        <p class="text-xs text-secondary">古代背景下的爱情故事，宫廷、权谋、爱恨情仇</p>
+                    </div>
+                    
+                    <div class="card genre-card p-4 hover:shadow-md transition-shadow cursor-pointer" onclick="selectGenre(this)">
+                        <div class="flex items-center mb-2">
+                            <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 mr-3">
+                                <i class="fas fa-magic"></i>
+                            </div>
+                            <h3 class="font-bold">玄幻言情</h3>
+                        </div>
+                        <p class="text-xs text-secondary">架空玄幻世界中的爱情故事，女主通常拥有特殊能力</p>
+                    </div>
+                    
+                    <div class="card genre-card p-4 hover:shadow-md transition-shadow cursor-pointer" onclick="selectGenre(this)">
+                        <div class="flex items-center mb-2">
+                            <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-3">
+                                <i class="fas fa-sync-alt"></i>
+                            </div>
+                            <h3 class="font-bold">重生逆袭</h3>
+                        </div>
+                        <p class="text-xs text-secondary">女主重生或穿越后，凭借前世记忆逆袭人生</p>
+                    </div>
+                    
+                    <div class="card genre-card p-4 hover:shadow-md transition-shadow cursor-pointer" onclick="selectGenre(this)">
+                        <div class="flex items-center mb-2">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-3">
+                                <i class="fas fa-briefcase"></i>
+                            </div>
+                            <h3 class="font-bold">职场甜宠</h3>
+                        </div>
+                        <p class="text-xs text-secondary">职场背景下的甜蜜爱情，通常男主是高冷总裁</p>
+                    </div>
+                    
+                    <div class="card genre-card p-4 hover:shadow-md transition-shadow cursor-pointer" onclick="selectGenre(this)">
+                        <div class="flex items-center mb-2">
+                            <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 mr-3">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h3 class="font-bold">悬疑推理</h3>
+                        </div>
+                        <p class="text-xs text-secondary">悬疑推理故事，女主通常拥有敏锐洞察力</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 子流派选择 -->
+            <div id="sub-genre-container" class="mb-4 hidden">
+                <h2 class="text-lg font-bold mb-3">选择子流派</h2>
+                <div id="sub-genre-list" class="grid grid-cols-2 gap-3">
+                    <!-- 子流派将通过JavaScript动态生成 -->
+                </div>
+            </div>
+            
+            <!-- 下一步按钮 -->
+            <div class="bottom-buttons">
+                <button id="next-button" class="btn btn-primary w-full" disabled onclick="goToNextStep()">
+                    下一步 <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 底部标签栏 -->
+        <div class="tab-bar">
+            <a href="home.html" class="tab-item" data-tab="home">
+                <i class="fas fa-home tab-icon"></i>
+                <span>首页</span>
+            </a>
+            <a href="novel-list.html" class="tab-item" data-tab="novels">
+                <i class="fas fa-book tab-icon"></i>
+                <span>我的小说</span>
+            </a>
+            <a href="create.html" class="tab-item active" data-tab="create">
+                <i class="fas fa-plus-circle tab-icon"></i>
+                <span>创作</span>
+            </a>
+            <a href="inspiration.html" class="tab-item" data-tab="inspiration">
+                <i class="fas fa-lightbulb tab-icon"></i>
+                <span>灵感</span>
+            </a>
+            <a href="profile.html" class="tab-item" data-tab="profile">
+                <i class="fas fa-user tab-icon"></i>
+                <span>我的</span>
+            </a>
+        </div>
+    </div>
+    
+    <script src="mobile-common.js"></script>
+    <script>
+        // 初始化变量
+        let selectedChannel = 'male';
+        let selectedGenre = null;
+        let selectedSubGenre = null;
+        
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 更新状态栏时间
+            updateStatusBarTime();
+            
+            // 初始化步骤条滚动
+            initStepsScroller();
+        });
+        
+        // 更新状态栏时间
+        function updateStatusBarTime() {
+            const timeElement = document.querySelector('.status-bar-time');
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            timeElement.textContent = `${hours}:${minutes}`;
+        }
+        
+        // 初始化步骤条滚动
+        function initStepsScroller() {
+            const scroller = document.getElementById('steps-scroller');
+            const leftArrow = document.getElementById('scroll-left');
+            const rightArrow = document.getElementById('scroll-right');
+            
+            // 检查是否需要显示左右箭头
+            function checkArrows() {
+                if (scroller.scrollLeft > 0) {
+                    leftArrow.classList.remove('hidden');
+                } else {
+                    leftArrow.classList.add('hidden');
+                }
+                
+                if (scroller.scrollLeft + scroller.clientWidth < scroller.scrollWidth - 10) {
+                    rightArrow.classList.remove('hidden');
+                } else {
+                    rightArrow.classList.add('hidden');
+                }
+            }
+            
+            // 初始检查
+            checkArrows();
+            
+            // 滚动事件
+            scroller.addEventListener('scroll', checkArrows);
+            
+            // 左右箭头点击事件
+            leftArrow.addEventListener('click', function() {
+                scroller.scrollBy({ left: -160, behavior: 'smooth' });
+            });
+            
+            rightArrow.addEventListener('click', function() {
+                scroller.scrollBy({ left: 160, behavior: 'smooth' });
+            });
+        }
+        
+        // 切换频道（男频/女频）
+        function toggleGenreType(channelType) {
+            selectedChannel = channelType;
+            selectedGenre = null;
+            selectedSubGenre = null;
+            
+            // 更新按钮样式
+            const maleButton = document.getElementById('male-button');
+            const femaleButton = document.getElementById('female-button');
+            
+            if (channelType === 'male') {
+                maleButton.className = 'btn-male flex-1 py-3 rounded-lg font-bold';
+                femaleButton.className = 'btn-secondary flex-1 py-3 rounded-lg font-bold';
+                
+                // 显示男频流派，隐藏女频流派
+                document.getElementById('male-genres').classList.remove('hidden');
+                document.getElementById('female-genres').classList.add('hidden');
+            } else {
+                maleButton.className = 'btn-secondary flex-1 py-3 rounded-lg font-bold';
+                femaleButton.className = 'btn-female flex-1 py-3 rounded-lg font-bold';
+                
+                // 显示女频流派，隐藏男频流派
+                document.getElementById('male-genres').classList.add('hidden');
+                document.getElementById('female-genres').classList.remove('hidden');
+            }
+            
+            // 隐藏子流派选择
+            document.getElementById('sub-genre-container').classList.add('hidden');
+            
+            // 更新下一步按钮状态
+            updateNextButton();
+        }
+        
+        // 选择流派
+        function selectGenre(element) {
+            // 移除所有流派的选中状态
+            const genres = document.querySelectorAll('.genre-card');
+            genres.forEach(genre => {
+                genre.classList.remove('selected');
+                genre.classList.remove('border-primary');
+                genre.classList.remove('bg-blue-50');
+            });
+            
+            // 添加当前流派的选中状态
+            element.classList.add('selected');
+            element.classList.add('border-primary');
+            element.classList.add('bg-blue-50');
+            
+            // 获取选中的流派名称
+            const genreName = element.querySelector('h3').textContent;
+            selectedGenre = genreName;
+            
+            // 显示子流派选择
+            showSubGenres(genreName);
+            
+            // 更新下一步按钮状态
+            updateNextButton();
+            
+            // 滚动到子流派区域
+            setTimeout(() => {
+                document.getElementById('sub-genre-container').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 300);
+        }
+        
+        // 显示子流派
+        function showSubGenres(genreName) {
+            const subGenreContainer = document.getElementById('sub-genre-container');
+            const subGenreList = document.getElementById('sub-genre-list');
+            
+            // 清空子流派列表
+            subGenreList.innerHTML = '';
+            
+            // 根据选择的流派显示对应的子流派
+            let subGenres = [];
+            
+            if (selectedChannel === 'male') {
+                switch (genreName) {
+                    case '都市':
+                        subGenres = [
+                            { name: '异能流', icon: 'bolt' },
+                            { name: '职场流', icon: 'briefcase' },
+                            { name: '医生流', icon: 'user-md' },
+                            { name: '学生流', icon: 'graduation-cap' },
+                            { name: '商战流', icon: 'chart-line' },
+                            { name: '保镖流', icon: 'shield-alt' }
+                        ];
+                        break;
+                    case '玄幻':
+                        subGenres = [
+                            { name: '东方玄幻', icon: 'dragon' },
+                            { name: '异世大陆', icon: 'globe-asia' },
+                            { name: '斗气世界', icon: 'fire' },
+                            { name: '武修世界', icon: 'fist-raised' }
+                        ];
+                        break;
+                    // 其他流派的子流派...
+                    default:
+                        subGenres = [
+                            { name: '传统流', icon: 'book' },
+                            { name: '创新流', icon: 'lightbulb' }
+                        ];
+                }
+            } else {
+                switch (genreName) {
+                    case '现代言情':
+                        subGenres = [
+                            { name: '总裁豪门', icon: 'building' },
+                            { name: '都市甜宠', icon: 'heart' },
+                            { name: '校园青春', icon: 'school' }
+                        ];
+                        break;
+                    case '古代言情':
+                        subGenres = [
+                            { name: '宫廷侯门', icon: 'crown' },
+                            { name: '江湖儿女', icon: 'mountain' },
+                            { name: '种田经商', icon: 'seedling' }
+                        ];
+                        break;
+                    // 其他流派的子流派...
+                    default:
+                        subGenres = [
+                            { name: '传统流', icon: 'book' },
+                            { name: '创新流', icon: 'lightbulb' }
+                        ];
+                }
+            }
+            
+            // 生成子流派HTML
+            subGenres.forEach(subGenre => {
+                const subGenreItem = document.createElement('div');
+                subGenreItem.className = 'card genre-card p-4 hover:shadow-md transition-shadow cursor-pointer';
+                subGenreItem.onclick = function() { selectSubGenre(this); };
+                
+                subGenreItem.innerHTML = `
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-primary bg-opacity-10 flex items-center justify-center text-primary mr-3">
+                            <i class="fas fa-${subGenre.icon}"></i>
+                        </div>
+                        <h3 class="font-bold">${subGenre.name}</h3>
+                    </div>
+                `;
+                
+                subGenreList.appendChild(subGenreItem);
+            });
+            
+            // 显示子流派容器
+            subGenreContainer.classList.remove('hidden');
+        }
+        
+        // 选择子流派
+        function selectSubGenre(element) {
+            // 移除所有子流派的选中状态
+            const subGenres = document.querySelectorAll('#sub-genre-list .genre-card');
+            subGenres.forEach(subGenre => {
+                subGenre.classList.remove('selected');
+                subGenre.classList.remove('border-primary');
+                subGenre.classList.remove('bg-blue-50');
+            });
+            
+            // 添加当前子流派的选中状态
+            element.classList.add('selected');
+            element.classList.add('border-primary');
+            element.classList.add('bg-blue-50');
+            
+            // 获取选中的子流派名称
+            const subGenreName = element.querySelector('h3').textContent;
+            selectedSubGenre = subGenreName;
+            
+            // 更新下一步按钮状态
+            updateNextButton();
+            
+            // 滚动到底部，显示下一步按钮
+            setTimeout(() => {
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            }, 300);
+        }
+        
+        // 更新下一步按钮状态
+        function updateNextButton() {
+            const nextButton = document.getElementById('next-button');
+            
+            if (selectedGenre && selectedSubGenre) {
+                nextButton.disabled = false;
+            } else {
+                nextButton.disabled = true;
+            }
+        }
+        
+        // 前往下一步
+        function goToNextStep() {
+            // 显示加载状态
+            const nextButton = document.getElementById('next-button');
+            const originalText = nextButton.innerHTML;
+            nextButton.innerHTML = '<span class="loading mr-2"></span> 加载中...';
+            nextButton.disabled = true;
+            
+            // 保存选择的频道和流派
+            localStorage.setItem('selectedChannel', selectedChannel);
+            localStorage.setItem('selectedGenre', selectedGenre);
+            localStorage.setItem('selectedSubGenre', selectedSubGenre);
+            
+            // 模拟加载延迟
+            setTimeout(() => {
+                // 跳转到下一步
+                window.location.href = 'story-outline.html';
+            }, 800);
+        }
+    </script>
+</body>
+</html> 

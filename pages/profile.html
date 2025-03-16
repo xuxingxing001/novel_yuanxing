@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心 - AI网文小说创作助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="common.css" rel="stylesheet">
+</head>
+<body>
+    <div class="page-container">
+        <!-- 导航栏 -->
+        <nav class="navbar">
+            <div class="container navbar-container">
+                <a href="home.html" class="navbar-brand">AI网文小说创作助手</a>
+                <div class="navbar-nav">
+                    <a href="novel-list.html" class="nav-link">我的小说</a>
+                    <a href="genre-selection.html" class="nav-link">创作中心</a>
+                    <a href="profile.html" class="nav-link active">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=80&q=80" alt="用户头像" class="avatar">
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 主要内容 -->
+        <main class="main-content">
+            <div class="container">
+                <!-- 页面标题 -->
+                <h1 class="text-3xl font-bold mb-8">个人中心</h1>
+
+                <!-- 个人信息和导航 -->
+                <div class="flex flex-col md:flex-row gap-8 mb-8">
+                    <!-- 左侧个人信息 -->
+                    <div class="md:w-1/4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <div class="mb-4">
+                                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=150&q=80" alt="用户头像" class="w-24 h-24 rounded-full mx-auto border-4 border-white shadow">
+                                </div>
+                                <h2 class="text-xl font-bold mb-1">张小明</h2>
+                                <p class="text-gray-500 mb-4">网文爱好者</p>
+                                <div class="flex justify-center gap-4 mb-4">
+                                    <div class="text-center">
+                                        <div class="font-bold">8</div>
+                                        <div class="text-sm text-gray-500">作品</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="font-bold">32,456</div>
+                                        <div class="text-sm text-gray-500">总字数</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="font-bold">15</div>
+                                        <div class="text-sm text-gray-500">天</div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary w-full">
+                                    <i class="fas fa-edit mr-2"></i> 编辑资料
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 导航菜单 -->
+                        <div class="mt-6">
+                            <ul class="bg-white rounded-lg shadow overflow-hidden">
+                                <li class="border-b">
+                                    <a href="#profile" class="block px-4 py-3 hover:bg-gray-50 active">
+                                        <i class="fas fa-user mr-2 text-gray-500"></i> 个人资料
+                                    </a>
+                                </li>
+                                <li class="border-b">
+                                    <a href="#messages" class="block px-4 py-3 hover:bg-gray-50">
+                                        <i class="fas fa-envelope mr-2 text-gray-500"></i> 消息通知
+                                        <span class="float-right bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">3</span>
+                                    </a>
+                                </li>
+                                <li class="border-b">
+                                    <a href="#settings" class="block px-4 py-3 hover:bg-gray-50">
+                                        <i class="fas fa-cog mr-2 text-gray-500"></i> 设置
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#subscription" class="block px-4 py-3 hover:bg-gray-50">
+                                        <i class="fas fa-crown mr-2 text-gray-500"></i> 会员订阅
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 右侧内容区域 -->
+                    <div class="md:w-3/4">
+                        <!-- 个人资料 -->
+                        <div id="profile" class="card mb-8">
+                            <div class="card-header">
+                                <h2 class="card-title">个人资料</h2>
+                                <button class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-edit mr-1"></i> 编辑
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <div class="form-group">
+                                            <label class="form-label">用户名</label>
+                                            <input type="text" class="form-control" value="xiaoming123" disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">昵称</label>
+                                            <input type="text" class="form-control" value="张小明" disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">邮箱</label>
+                                            <input type="email" class="form-control" value="xiaoming@example.com" disabled>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="form-group">
+                                            <label class="form-label">注册时间</label>
+                                            <input type="text" class="form-control" value="2023-06-15" disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">会员等级</label>
+                                            <input type="text" class="form-control" value="普通会员" disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">创作偏好</label>
+                                            <input type="text" class="form-control" value="男频-都市异能" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 消息通知 -->
+                        <div id="messages" class="card mb-8">
+                            <div class="card-header">
+                                <h2 class="card-title">消息通知</h2>
+                                <button class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-check-double mr-1"></i> 全部已读
+                                </button>
+                            </div>
+                            <div class="card-body p-0">
+                                <ul class="divide-y">
+                                    <li class="p-4 bg-blue-50">
+                                        <div class="flex justify-between items-start mb-1">
+                                            <h3 class="font-bold">系统通知：会员特权更新</h3>
+                                            <span class="text-xs text-gray-500">2023-08-22</span>
+                                        </div>
+                                        <p class="text-gray-600 mb-2">尊敬的用户，我们的会员特权已更新，现在订阅会员可享受更多AI创作额度和专属模型。</p>
+                                        <div class="flex justify-end">
+                                            <button class="btn btn-sm btn-secondary">
+                                                <i class="fas fa-check mr-1"></i> 标记已读
+                                            </button>
+                                        </div>
+                                    </li>
+                                    <li class="p-4 bg-blue-50">
+                                        <div class="flex justify-between items-start mb-1">
+                                            <h3 class="font-bold">活动通知：创作大赛开始</h3>
+                                            <span class="text-xs text-gray-500">2023-08-20</span>
+                                        </div>
+                                        <p class="text-gray-600 mb-2">第一届AI辅助网文创作大赛正式开始，参与即可获得额外创作额度，优胜者还将获得丰厚奖励。</p>
+                                        <div class="flex justify-end">
+                                            <button class="btn btn-sm btn-secondary">
+                                                <i class="fas fa-check mr-1"></i> 标记已读
+                                            </button>
+                                        </div>
+                                    </li>
+                                    <li class="p-4 bg-blue-50">
+                                        <div class="flex justify-between items-start mb-1">
+                                            <h3 class="font-bold">系统通知：新功能上线</h3>
+                                            <span class="text-xs text-gray-500">2023-08-18</span>
+                                        </div>
+                                        <p class="text-gray-600 mb-2">我们新增了"AI优化建议"功能，可以智能分析您的小说内容，提供针对性的优化建议。</p>
+                                        <div class="flex justify-end">
+                                            <button class="btn btn-sm btn-secondary">
+                                                <i class="fas fa-check mr-1"></i> 标记已读
+                                            </button>
+                                        </div>
+                                    </li>
+                                    <li class="p-4">
+                                        <div class="flex justify-between items-start mb-1">
+                                            <h3 class="font-bold">系统通知：欢迎使用</h3>
+                                            <span class="text-xs text-gray-500">2023-06-15</span>
+                                        </div>
+                                        <p class="text-gray-600 mb-2">欢迎使用AI网文小说创作助手，我们将为您提供强大的AI辅助创作功能，帮助您轻松创作网文小说。</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- 设置 -->
+                        <div id="settings" class="card mb-8">
+                            <div class="card-header">
+                                <h2 class="card-title">设置</h2>
+                            </div>
+                            <div class="card-body">
+                                <h3 class="font-bold mb-4">通用设置</h3>
+                                <div class="mb-6">
+                                    <div class="flex justify-between items-center mb-4">
+                                        <div>
+                                            <h4 class="font-medium">消息通知</h4>
+                                            <p class="text-sm text-gray-500">接收系统通知和活动消息</p>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" class="sr-only peer" checked>
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                        </label>
+                                    </div>
+                                    <div class="flex justify-between items-center mb-4">
+                                        <div>
+                                            <h4 class="font-medium">自动保存</h4>
+                                            <p class="text-sm text-gray-500">每5分钟自动保存创作内容</p>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" class="sr-only peer" checked>
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                        </label>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <h4 class="font-medium">夜间模式</h4>
+                                            <p class="text-sm text-gray-500">使用深色主题</p>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" class="sr-only peer">
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <h3 class="font-bold mb-4">账号设置</h3>
+                                <div class="mb-6">
+                                    <div class="form-group">
+                                        <label class="form-label">修改密码</label>
+                                        <div class="flex gap-4">
+                                            <input type="password" class="form-control" placeholder="当前密码">
+                                            <input type="password" class="form-control" placeholder="新密码">
+                                            <button class="btn btn-primary">保存</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">绑定手机</label>
+                                        <div class="flex gap-4">
+                                            <input type="text" class="form-control" placeholder="请输入手机号" value="138****6789">
+                                            <button class="btn btn-secondary">更换</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h3 class="font-bold mb-4">创作偏好</h3>
+                                <div>
+                                    <div class="form-group">
+                                        <label class="form-label">默认创作类型</label>
+                                        <select class="form-control">
+                                            <option>男频-都市异能</option>
+                                            <option>男频-玄幻修真</option>
+                                            <option>男频-科幻未来</option>
+                                            <option>女频-现代言情</option>
+                                            <option>女频-古代言情</option>
+                                            <option>女频-重生逆袭</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">默认AI模型</label>
+                                        <select class="form-control">
+                                            <option>通用模型</option>
+                                            <option>男频优化模型</option>
+                                            <option>女频优化模型</option>
+                                            <option>玄幻专精模型</option>
+                                            <option>言情专精模型</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 会员订阅 -->
+                        <div id="subscription" class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">会员订阅</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-crown text-yellow-500 text-xl mr-3"></i>
+                                        <div id="membership-status">
+                                            <h3 class="font-bold">当前等级：普通会员</h3>
+                                            <p class="text-sm text-gray-600">每日可使用AI创作额度：1000字</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h3 class="font-bold mb-4">会员方案</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                                    <div class="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                                        <div class="text-center mb-4">
+                                            <h4 class="font-bold text-lg">月度会员</h4>
+                                            <div class="text-2xl font-bold text-blue-600 my-2">¥29.9</div>
+                                            <p class="text-sm text-gray-500">每月</p>
+                                        </div>
+                                        <ul class="space-y-2 mb-4">
+                                            <li class="flex items-center">
+                                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                                <span>每日10,000字AI创作额度</span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                                <span>优先使用高级AI模型</span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                                <span>无广告体验</span>
+                                            </li>
+                                        </ul>
+                                        <button class="btn btn-primary w-full" onclick="subscribeToMembership('monthly')">立即订阅</button>
+                                    </div>
+                                    <div class="border rounded-lg p-4 hover:shadow-md transition-shadow bg-blue-50 border-blue-200 relative">
+                                        <div class="absolute top-0 right-0 bg-blue-600 text-white text-xs px-2 py-1 rounded-bl-lg rounded-tr-lg">最受欢迎</div>
+                                        <div class="text-center mb-4">
+                                            <h4 class="font-bold text-lg">季度会员</h4>
+                                            <div class="text-2xl font-bold text-blue-600 my-2">¥79.9</div>
+                                            <p class="text-sm text-gray-500">每三个月</p>
+                                        </div>
+                                        <ul class="space-y-2 mb-4">
+                                            <li class="flex items-center">
+                                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                                <span>每日30,000字AI创作额度</span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                                <span>优先使用高级AI模型</span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                                <span>无广告体验</span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                                <span>专属客服支持</span>
+                                            </li>
+                                        </ul>
+                                        <button class="btn btn-primary w-full" onclick="subscribeToMembership('quarterly')">立即订阅</button>
+                                    </div>
+                                    <div class="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                                        <div class="text-center mb-4">
+                                            <h4 class="font-bold text-lg">年度会员</h4>
+                                            <div class="text-2xl font-bold text-blue-600 my-2">¥299.9</div>
+                                            <p class="text-sm text-gray-500">每年</p>
+                                        </div>
+                                        <ul class="space-y-2 mb-4">
+                                            <li class="flex items-center">
+                                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                                <span>每日无限AI创作额度</span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                                <span>优先使用高级AI模型</span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                                <span>无广告体验</span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                                <span>专属客服支持</span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                                <span>专属定制模型</span>
+                                            </li>
+                                        </ul>
+                                        <button class="btn btn-primary w-full" onclick="subscribeToMembership('annual')">立即订阅</button>
+                                    </div>
+                                </div>
+
+                                <div class="text-center text-sm text-gray-500">
+                                    <p>如需企业版或定制服务，请 <a href="#" class="text-blue-600 hover:underline">联系我们</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- 页脚 -->
+        <footer class="bg-gray-800 text-white py-6">
+            <div class="container text-center">
+                <p class="text-gray-400">© 2023 AI网文小说创作助手. 保留所有权利.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="./common.js"></script>
+</body>
+</html> 

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>章节大纲生成 - AI网文小说创作助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="common.css" rel="stylesheet">
+    <link href="common/creation-info-accordion.css" rel="stylesheet">
+    <style>
+        .chapter-item {
+            cursor: grab;
+        }
+        .chapter-item:active {
+            cursor: grabbing;
+        }
+        .chapter-item.dragging {
+            opacity: 0.5;
+            border: 2px dashed var(--border-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <!-- 导航栏 -->
+        <nav class="navbar">
+            <div class="container navbar-container">
+                <a href="home.html" class="navbar-brand">AI网文小说创作助手</a>
+                <div class="navbar-nav">
+                    <a href="novel-list.html" class="nav-link">我的小说</a>
+                    <a href="genre-selection.html" class="nav-link active">创作中心</a>
+                    <a href="profile.html" class="nav-link">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=80&q=80" alt="用户头像" class="avatar">
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 主要内容 -->
+        <div class="container main-container">
+            <div class="content-wrapper">
+                <!-- 步骤指示器 -->
+                <div class="steps-container mb-6">
+                    <div class="steps">
+                        <div class="step completed">
+                            <div class="step-circle">1</div>
+                            <div class="step-text">选择流派</div>
+                        </div>
+                        <div class="step-connector completed"></div>
+                        <div class="step completed">
+                            <div class="step-circle">2</div>
+                            <div class="step-text">输入梗概</div>
+                        </div>
+                        <div class="step-connector completed"></div>
+                        <div class="step completed">
+                            <div class="step-circle">3</div>
+                            <div class="step-text">故事要素</div>
+                        </div>
+                        <div class="step-connector completed"></div>
+                        <div class="step active">
+                            <div class="step-circle">4</div>
+                            <div class="step-text">章节大纲</div>
+                        </div>
+                        <div class="step-connector"></div>
+                        <div class="step">
+                            <div class="step-circle">5</div>
+                            <div class="step-text">章节细纲</div>
+                        </div>
+                        <div class="step-connector"></div>
+                        <div class="step">
+                            <div class="step-circle">6</div>
+                            <div class="step-text">生成正文</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 创作信息手风琴组件 -->
+                <div id="creation-info-container">
+                    <!-- 这里将通过JavaScript动态加载创作信息手风琴组件 -->
+                </div>
+                
+                <!-- 页面主要内容 -->
+                <div class="card mb-6">
+                    <div class="card-header">
+                        <h2 class="card-title">章节大纲生成</h2>
+                    </div>
+                    <div class="card-body">
+                        <!-- 页面标题 -->
+                        <div class="mb-8">
+                            <h1 class="text-3xl font-bold text-center">章节大纲生成</h1>
+                            <p class="text-center text-gray-600 mt-2">AI将为您生成章节大纲，您可以根据需要进行调整</p>
+                        </div>
+
+                        <!-- 步骤导航 -->
+                        <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                            <h3 class="font-bold mb-2">创作进度</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <a href="genre-selection.html" class="text-sm px-3 py-1 bg-white border rounded hover:bg-gray-100 flex items-center">
+                                    <i class="fas fa-check-circle text-green-500 mr-1"></i> 流派：都市-异能流
+                                </a>
+                                <a href="story-outline.html" class="text-sm px-3 py-1 bg-white border rounded hover:bg-gray-100 flex items-center">
+                                    <i class="fas fa-check-circle text-green-500 mr-1"></i> 梗概：已完成
+                                </a>
+                                <a href="inspiration-generation.html" class="text-sm px-3 py-1 bg-white border rounded hover:bg-gray-100 flex items-center">
+                                    <i class="fas fa-check-circle text-green-500 mr-1"></i> 故事要素：已完成
+                                </a>
+                                <span class="text-sm px-3 py-1 bg-blue-50 border border-blue-200 rounded flex items-center font-bold">
+                                    <i class="fas fa-pen text-blue-500 mr-1"></i> 当前：章节大纲
+                                </span>
+                                <a href="detailed-outline.html" class="text-sm px-3 py-1 bg-white border rounded hover:bg-gray-100 flex items-center opacity-75">
+                                    <i class="fas fa-circle text-gray-300 mr-1"></i> 下一步：章节细纲
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- 章节结构设置 -->
+                        <div class="card mb-6">
+                            <div class="card-header">
+                                <h2 class="card-title">章节结构设置</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="form-label">章节数量</label>
+                                        <div class="flex items-center gap-2">
+                                            <input type="range" id="chapter-count" min="5" max="50" value="20" class="w-full">
+                                            <span id="chapter-count-display" class="text-lg font-bold">20</span>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-1">建议章节数量在10-30之间，过多或过少可能影响故事结构</p>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">故事结构</label>
+                                        <select id="story-structure" class="form-control">
+                                            <option value="three-act">三幕结构（经典）</option>
+                                            <option value="hero-journey">英雄之旅</option>
+                                            <option value="five-act">五幕结构</option>
+                                            <option value="save-the-cat">救猫咪结构</option>
+                                            <option value="custom">自定义</option>
+                                        </select>
+                                        <p class="text-xs text-gray-500 mt-1">不同的故事结构适合不同类型的小说</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 生成按钮 -->
+                        <div class="text-center mb-6">
+                            <button id="generate-outline" class="btn btn-primary btn-lg">
+                                <i class="fas fa-magic mr-2"></i> 生成章节大纲
+                            </button>
+                        </div>
+
+                        <!-- 章节大纲列表 -->
+                        <div class="card mb-6">
+                            <div class="card-header">
+                                <h2 class="card-title">章节大纲</h2>
+                                <div class="flex gap-2">
+                                    <button class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-plus"></i> 添加章节
+                                    </button>
+                                    <button class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-redo"></i> 重新生成
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-gray-500 mb-4">拖动章节可以调整顺序，点击章节可以编辑内容</p>
+                                
+                                <div id="chapter-list" class="space-y-3">
+                                    <!-- 章节1 -->
+                                    <div class="chapter-item p-3 bg-white border rounded-lg shadow-sm flex items-center">
+                                        <div class="chapter-handle mr-3 text-gray-400">
+                                            <i class="fas fa-grip-vertical"></i>
+                                        </div>
+                                        <div class="flex-grow">
+                                            <div class="flex items-center">
+                                                <span class="font-bold">第1章：</span>
+                                                <span class="ml-1">意外获能</span>
+                                            </div>
+                                            <p class="text-sm text-gray-600 mt-1">李天阳在一次偶然的机会下获得了能够看到他人情感值的神秘系统，初次体验这种能力带来的变化。</p>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <button class="btn btn-sm btn-icon">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-icon text-red-500">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 章节2 -->
+                                    <div class="chapter-item p-3 bg-white border rounded-lg shadow-sm flex items-center">
+                                        <div class="chapter-handle mr-3 text-gray-400">
+                                            <i class="fas fa-grip-vertical"></i>
+                                        </div>
+                                        <div class="flex-grow">
+                                            <div class="flex items-center">
+                                                <span class="font-bold">第2章：</span>
+                                                <span class="ml-1">初试能力</span>
+                                            </div>
+                                            <p class="text-sm text-gray-600 mt-1">李天阳开始尝试使用自己的能力，在校园中解决了一些小麻烦，逐渐熟悉能力的使用方法。</p>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <button class="btn btn-sm btn-icon">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-icon text-red-500">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 章节3 -->
+                                    <div class="chapter-item p-3 bg-white border rounded-lg shadow-sm flex items-center">
+                                        <div class="chapter-handle mr-3 text-gray-400">
+                                            <i class="fas fa-grip-vertical"></i>
+                                        </div>
+                                        <div class="flex-grow">
+                                            <div class="flex items-center">
+                                                <span class="font-bold">第3章：</span>
+                                                <span class="ml-1">神秘女孩</span>
+                                            </div>
+                                            <p class="text-sm text-gray-600 mt-1">李天阳遇到一个无法读取情感值的神秘女孩，引起了他的好奇，决定一探究竟。</p>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <button class="btn btn-sm btn-icon">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-icon text-red-500">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 操作按钮 -->
+                        <div class="flex justify-between">
+                            <a href="inspiration-generation.html" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left mr-2"></i> 上一步
+                            </a>
+                            <a href="detailed-outline.html" class="btn btn-primary">
+                                <i class="fas fa-arrow-right mr-2"></i> 下一步
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="common.js"></script>
+    <script src="common/creation-info-accordion.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 加载创作信息手风琴组件
+            fetch('common/creation-info-template.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('creation-info-container').innerHTML = html;
+                    // 初始化手风琴组件
+                    initCreationInfoAccordion();
+                });
+                
+            // 章节数量滑块
+            const chapterCountSlider = document.getElementById('chapter-count');
+            const chapterCountDisplay = document.getElementById('chapter-count-display');
+            
+            chapterCountSlider.addEventListener('input', function() {
+                chapterCountDisplay.textContent = this.value;
+            });
+            
+            // 其他页面特定的JavaScript保持不变
+            // ...
+        });
+    </script>
+</body>
+</html> 

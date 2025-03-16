@@ -1,0 +1,46 @@
+/* 创作信息手风琴组件样式 */
+
+.creation-info-accordion {
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    background-color: white;
+}
+
+.creation-info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    cursor: pointer;
+    background-color: white;
+    border-bottom: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.creation-info-header:hover {
+    background-color: #f9fafb;
+}
+
+.creation-info-header.active {
+    border-bottom-color: var(--border-color);
+}
+
+.creation-info-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.creation-info-content.expanded {
+    overflow: visible;
+}
+
+.creation-info-body {
+    padding: 1rem;
+}
+
+.accordion-icon {
+    transition: transform 0.3s ease;
+} 

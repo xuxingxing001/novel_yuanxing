@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小说阅读 - AI网文小说创作助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="mobile-common.css" rel="stylesheet">
+    <link href="novel-view-styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="mobile-container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="status-bar-left">
+                <span class="status-bar-time">9:41</span>
+            </div>
+            <div class="status-bar-right">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi ml-2"></i>
+                <i class="fas fa-battery-full ml-2 status-bar-battery"></i>
+            </div>
+        </div>
+        
+        <!-- 导航栏 -->
+        <div class="nav-bar">
+            <div class="nav-left">
+                <a href="novel-list.html">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </div>
+            <div class="nav-title">情感读心者</div>
+            <div class="nav-right">
+                <button id="settings-btn" class="p-2">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 阅读工具栏 -->
+        <div class="flex justify-between items-center p-2 bg-gray-100 border-b">
+            <button id="chapters-btn" class="p-2 text-sm flex items-center">
+                <i class="fas fa-list-ul mr-1"></i> 章节列表
+            </button>
+            <div class="text-sm text-gray-500">
+                <span id="reading-progress">1/30</span>
+            </div>
+        </div>
+        
+        <!-- 阅读区域 -->
+        <div id="reading-area" class="reading-area">
+            <h1 id="chapter-title" class="chapter-title">第一章 意外获得能力</h1>
+            <div id="chapter-content" class="chapter-content">
+                <!-- 章节内容将通过JavaScript动态加载 -->
+                <p>大学生李天阳在一次偶然的机会下获得了一个神秘的系统，可以看到他人的情感值。从此，他的生活发生了翻天覆地的变化，不仅能够轻松应对各种人际关系，还能在危机时刻洞察他人的真实想法。</p>
+                <p>这一天，李天阳像往常一样在校园里漫步，突然一道刺眼的光芒闪过，他感到一阵头晕目眩，等他恢复意识时，发现周围的人头顶上都浮现出了彩色的光晕，不同的颜色似乎代表着不同的情绪。</p>
+                <p>"这是怎么回事？"李天阳揉了揉眼睛，以为自己出现了幻觉，但那些光晕依然清晰可见。</p>
+                <p>就在这时，一个系统提示音在他脑海中响起："恭喜宿主激活情感洞察系统，现在你可以看到他人的情感值了。"</p>
+            </div>
+        </div>
+        
+        <!-- 章节导航 -->
+        <div class="chapter-nav">
+            <button id="prev-chapter" class="chapter-nav-btn">
+                <i class="fas fa-arrow-left"></i> 上一章
+            </button>
+            <button id="next-chapter" class="chapter-nav-btn">
+                下一章 <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        
+        <!-- 章节列表面板 -->
+        <div id="chapter-list" class="chapter-list-panel">
+            <div class="chapter-list-header">
+                <div class="chapter-list-title">章节列表</div>
+                <button id="chapter-list-close" class="chapter-list-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="chapter-list-content" class="chapter-list-content">
+                <!-- 章节列表将通过JavaScript动态加载 -->
+            </div>
+        </div>
+        
+        <!-- 阅读设置面板 -->
+        <div id="reading-settings" class="reading-settings">
+            <div class="settings-option">
+                <div class="settings-option-title">
+                    <i class="fas fa-font"></i> 字体大小
+                </div>
+                <div class="settings-option-items">
+                    <div class="settings-item font-size-item" data-size="small">小</div>
+                    <div class="settings-item font-size-item" data-size="medium">中</div>
+                    <div class="settings-item font-size-item" data-size="large">大</div>
+                    <div class="settings-item font-size-item" data-size="xlarge">特大</div>
+                </div>
+            </div>
+            
+            <div class="settings-option">
+                <div class="settings-option-title">
+                    <i class="fas fa-fill-drip"></i> 背景颜色
+                </div>
+                <div class="settings-option-items">
+                    <div class="settings-item background-item" data-bg="white">白色</div>
+                    <div class="settings-item background-item" data-bg="sepia">护眼</div>
+                    <div class="settings-item background-item" data-bg="dark">暗色</div>
+                    <div class="settings-item background-item" data-bg="black">黑色</div>
+                </div>
+            </div>
+            
+            <div class="settings-option">
+                <div class="settings-option-title">
+                    <i class="fas fa-text-height"></i> 行间距
+                </div>
+                <div class="settings-option-items">
+                    <div class="settings-item line-height-item" data-height="compact">紧凑</div>
+                    <div class="settings-item line-height-item" data-height="normal">标准</div>
+                    <div class="settings-item line-height-item" data-height="relaxed">宽松</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 遮罩层 -->
+        <div id="overlay" class="overlay"></div>
+    </div>
+    
+    <script src="mobile-common.js"></script>
+    <script src="novel-view-functions.js"></script>
+</body>
+</html> 

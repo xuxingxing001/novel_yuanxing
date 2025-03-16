@@ -1,0 +1,452 @@
+/* 章节细纲页面样式 */
+
+/* 滚动步骤条样式 */
+.steps-scroller-container {
+    position: relative;
+    overflow: hidden;
+    margin: 1rem 0;
+    padding: 0 1.5rem;
+}
+
+.steps-scroller {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0.5rem 0;
+}
+
+.steps-scroller::-webkit-scrollbar {
+    display: none;
+}
+
+.step-item {
+    flex: 0 0 auto;
+    width: 80px;
+    scroll-snap-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 0.25rem;
+}
+
+.step-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+    position: relative;
+    background-color: #e5e7eb;
+    color: #6b7280;
+    transition: all 0.3s ease;
+}
+
+.step-circle.completed {
+    background-color: #10b981;
+    color: white;
+}
+
+.step-circle.active {
+    background-color: #6366f1;
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.4);
+}
+
+.step-label {
+    font-size: 0.7rem;
+    text-align: center;
+    color: #6b7280;
+    max-width: 100%;
+    white-space: normal;
+    line-height: 1.2;
+}
+
+.step-item.completed .step-label,
+.step-item.active .step-label {
+    color: #374151;
+    font-weight: 600;
+}
+
+.step-connector {
+    position: absolute;
+    top: 25px;
+    left: 50px;
+    height: 2px;
+    background-color: #e5e7eb;
+    z-index: -1;
+    transition: background-color 0.3s ease;
+}
+
+.step-connector.filled {
+    background-color: #10b981;
+}
+
+.scroll-arrow {
+    position: absolute;
+    top: 15px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+}
+
+.scroll-arrow:active {
+    transform: scale(0.95);
+    background-color: rgba(245, 245, 245, 0.9);
+}
+
+.scroll-left {
+    left: 0.5rem;
+}
+
+.scroll-right {
+    right: 0.5rem;
+}
+
+/* 章节选择器样式 */
+.chapter-selector {
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background-color: var(--bg-primary);
+}
+
+.chapter-selector-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background-color: var(--bg-light);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.chapter-selector-title {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.chapter-selector-title i {
+    margin-right: 0.5rem;
+    color: var(--primary-color);
+}
+
+.chapter-navigation {
+    display: flex;
+    align-items: center;
+}
+
+.chapter-nav-btn {
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius);
+    background-color: var(--bg-primary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+}
+
+.chapter-nav-btn:active {
+    transform: scale(0.95);
+    background-color: var(--bg-light);
+}
+
+.chapter-nav-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.chapter-nav-btn:first-child {
+    margin-right: 0.5rem;
+}
+
+.chapter-info {
+    padding: 1rem;
+}
+
+.chapter-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.chapter-summary {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+}
+
+/* 场景列表样式 */
+.scene-list {
+    margin-bottom: 1.5rem;
+}
+
+.scene-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.scene-list-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.scene-card {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.scene-card:hover, .scene-card:active {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.scene-card.selected {
+    border-color: var(--primary-color);
+    background-color: rgba(99, 102, 241, 0.05);
+}
+
+.scene-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.scene-title {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.scene-actions {
+    display: flex;
+}
+
+.scene-action-btn {
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius);
+    background-color: var(--bg-light);
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+    margin-left: 0.5rem;
+}
+
+.scene-action-btn:active {
+    transform: scale(0.95);
+    background-color: var(--bg-secondary);
+}
+
+.scene-content {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.scene-meta {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+}
+
+.scene-meta-item {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+}
+
+.scene-meta-item i {
+    margin-right: 0.25rem;
+    color: var(--primary-color);
+}
+
+/* 大纲编辑器样式 */
+.outline-editor {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.outline-editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background-color: var(--bg-light);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.outline-editor-title {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.outline-editor-title i {
+    margin-right: 0.5rem;
+    color: var(--primary-color);
+}
+
+.outline-editor-body {
+    padding: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+textarea.form-control {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.word-count {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-align: right;
+    margin-top: 0.25rem;
+}
+
+.generate-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+}
+
+.generate-btn:active {
+    transform: scale(0.98);
+    background-color: var(--primary-dark);
+}
+
+.generate-btn i {
+    margin-right: 0.5rem;
+}
+
+.result-container {
+    background-color: var(--bg-light);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.result-text {
+    white-space: pre-wrap;
+    line-height: 1.6;
+    color: var(--text-primary);
+}
+
+/* 添加场景按钮 */
+.add-scene-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    background-color: var(--bg-light);
+    border: 1px dashed var(--border-color);
+    border-radius: var(--radius-lg);
+    color: var(--text-secondary);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 1.5rem;
+}
+
+.add-scene-btn:active {
+    background-color: var(--bg-secondary);
+}
+
+.add-scene-btn i {
+    margin-right: 0.5rem;
+}
+
+/* 底部按钮区域 */
+.bottom-buttons {
+    position: fixed;
+    bottom: 60px;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    background-color: white;
+    border-top: 1px solid #e2e8f0;
+    z-index: 10;
+    /* 适配iPhone底部安全区域 */
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0));
+}
+
+@media (min-width: 768px) {
+    .bottom-buttons {
+        width: 370px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-bottom-left-radius: 34px;
+        border-bottom-right-radius: 34px;
+    }
+} 

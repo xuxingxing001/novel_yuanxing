@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>章节编辑 - AI网文小说创作助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="mobile-common.css" rel="stylesheet">
+    <style>
+        /* 章节编辑页面专用样式 */
+        .editor-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 8rem);
+        }
+        
+        .editor-header {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            background-color: #f9fafb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .editor-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .editor-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .editor-content {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+        
+        .editor-textarea {
+            width: 100%;
+            height: 100%;
+            border: none;
+            resize: none;
+            font-size: 1rem;
+            line-height: 1.6;
+            outline: none;
+        }
+        
+        .editor-footer {
+            padding: 0.75rem 1rem;
+            border-top: 1px solid #e5e7eb;
+            background-color: #f9fafb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .editor-stats {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+        
+        .editor-tools {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .tool-btn {
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: #f3f4f6;
+            color: #4b5563;
+            transition: all 0.2s ease;
+        }
+        
+        .tool-btn:hover {
+            background-color: #e5e7eb;
+        }
+        
+        .ai-assist-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            border-top: 1px solid #e5e7eb;
+            padding: 1rem;
+            z-index: 50;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .ai-assist-panel.active {
+            transform: translateY(0);
+        }
+        
+        .ai-assist-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .ai-assist-title {
+            font-weight: 600;
+        }
+        
+        .ai-assist-close {
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: #f3f4f6;
+        }
+        
+        .ai-assist-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .ai-assist-option {
+            padding: 0.75rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        
+        .ai-assist-option:hover {
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 40;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="status-bar-left">
+                <span class="status-bar-time">9:41</span>
+            </div>
+            <div class="status-bar-right">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi ml-2"></i>
+                <i class="fas fa-battery-full ml-2 status-bar-battery"></i>
+            </div>
+        </div>
+        
+        <!-- 导航栏 -->
+        <div class="nav-bar">
+            <div class="nav-left">
+                <a href="javascript:history.back()">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </div>
+            <div class="nav-title">章节编辑</div>
+            <div class="nav-right">
+                <button id="save-chapter-btn" class="p-2">
+                    <i class="fas fa-save"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 编辑器 -->
+        <div class="editor-container">
+            <div class="editor-header">
+                <div class="editor-title">
+                    <input type="text" id="chapter-title-input" class="form-control" placeholder="章节标题">
+                </div>
+                <div class="editor-actions">
+                    <button id="ai-assist-btn" class="btn btn-sm btn-primary">
+                        <i class="fas fa-robot mr-1"></i> AI辅助
+                    </button>
+                </div>
+            </div>
+            <div class="editor-content">
+                <textarea id="chapter-content" class="editor-textarea" placeholder="在这里输入章节内容..."></textarea>
+            </div>
+            <div class="editor-footer">
+                <div class="editor-stats">
+                    <span id="word-count">0</span> 字
+                </div>
+                <div class="editor-tools">
+                    <button class="tool-btn" title="插入对话">
+                        <i class="fas fa-comment"></i>
+                    </button>
+                    <button class="tool-btn" title="插入描写">
+                        <i class="fas fa-image"></i>
+                    </button>
+                    <button class="tool-btn" title="插入心理活动">
+                        <i class="fas fa-brain"></i>
+                    </button>
+                    <button class="tool-btn" title="插入场景转换">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- AI辅助面板 -->
+        <div id="ai-assist-panel" class="ai-assist-panel">
+            <div class="ai-assist-header">
+                <div class="ai-assist-title">AI辅助写作</div>
+                <button id="ai-assist-close" class="ai-assist-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="ai-assist-options">
+                <div class="ai-assist-option" onclick="useAIAssist('continue')">
+                    <i class="fas fa-pen mr-1"></i> 续写内容
+                </div>
+                <div class="ai-assist-option" onclick="useAIAssist('polish')">
+                    <i class="fas fa-magic mr-1"></i> 润色文本
+                </div>
+                <div class="ai-assist-option" onclick="useAIAssist('dialogue')">
+                    <i class="fas fa-comments mr-1"></i> 生成对话
+                </div>
+                <div class="ai-assist-option" onclick="useAIAssist('description')">
+                    <i class="fas fa-image mr-1"></i> 生成描写
+                </div>
+                <div class="ai-assist-option" onclick="useAIAssist('emotion')">
+                    <i class="fas fa-heart mr-1"></i> 情感表达
+                </div>
+                <div class="ai-assist-option" onclick="useAIAssist('plot')">
+                    <i class="fas fa-chart-line mr-1"></i> 情节建议
+                </div>
+            </div>
+            <button class="btn btn-primary btn-block">
+                <i class="fas fa-robot mr-1"></i> 一键优化全文
+            </button>
+        </div>
+        
+        <!-- 遮罩层 -->
+        <div id="overlay" class="overlay"></div>
+    </div>
+    
+    <script src="mobile-common.js"></script>
+    <script>
+        // 当前章节数据
+        let chapterData = {
+            title: '',
+            content: '',
+            wordCount: 0,
+            updateTime: new Date().toISOString().split('T')[0]
+        };
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 从URL参数获取小说ID和章节索引
+            const urlParams = new URLSearchParams(window.location.search);
+            const novelId = urlParams.get('id') || '1';
+            const chapterIndex = urlParams.get('chapter') || '0';
+            
+            // 加载章节数据
+            loadChapterData(novelId, chapterIndex);
+            
+            // 初始化编辑器
+            initEditor();
+            
+            // 初始化AI辅助面板
+            initAIAssistPanel();
+            
+            // 初始化保存按钮
+            document.getElementById('save-chapter-btn').addEventListener('click', saveChapter);
+        });
+        
+        /**
+         * 加载章节数据
+         * @param {string} novelId - 小说ID
+         * @param {string} chapterIndex - 章节索引
+         */
+        function loadChapterData(novelId, chapterIndex) {
+            // 尝试从本地存储加载小说数据
+            const savedNovel = localStorage.getItem(`novel_${novelId}`);
+            if (savedNovel) {
+                const novelData = JSON.parse(savedNovel);
+                if (novelData.chapters && novelData.chapters[chapterIndex]) {
+                    chapterData = novelData.chapters[chapterIndex];
+                    
+                    // 填充编辑器
+                    document.getElementById('chapter-title-input').value = chapterData.title;
+                    document.getElementById('chapter-content').value = chapterData.content;
+                    document.getElementById('word-count').textContent = chapterData.wordCount;
+                    
+                    // 更新导航栏标题
+                    document.querySelector('.nav-title').textContent = chapterData.title;
+                }
+            }
+        }
+        
+        /**
+         * 初始化编辑器
+         */
+        function initEditor() {
+            const titleInput = document.getElementById('chapter-title-input');
+            const contentTextarea = document.getElementById('chapter-content');
+            const wordCountElement = document.getElementById('word-count');
+            
+            // 标题输入事件
+            titleInput.addEventListener('input', function() {
+                chapterData.title = this.value;
+                document.querySelector('.nav-title').textContent = this.value || '章节编辑';
+            });
+            
+            // 内容输入事件
+            contentTextarea.addEventListener('input', function() {
+                chapterData.content = this.value;
+                
+                // 计算字数
+                const wordCount = this.value.replace(/\s+/g, '').length;
+                chapterData.wordCount = wordCount;
+                wordCountElement.textContent = wordCount;
+            });
+        }
+        
+        /**
+         * 初始化AI辅助面板
+         */
+        function initAIAssistPanel() {
+            const aiAssistBtn = document.getElementById('ai-assist-btn');
+            const aiAssistPanel = document.getElementById('ai-assist-panel');
+            const aiAssistClose = document.getElementById('ai-assist-close');
+            const overlay = document.getElementById('overlay');
+            
+            // 显示AI辅助面板
+            aiAssistBtn.addEventListener('click', function() {
+                aiAssistPanel.classList.add('active');
+                overlay.classList.add('active');
+            });
+            
+            // 关闭AI辅助面板
+            aiAssistClose.addEventListener('click', function() {
+                aiAssistPanel.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+            
+            // 点击遮罩层关闭面板
+            overlay.addEventListener('click', function() {
+                aiAssistPanel.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+        }
+        
+        /**
+         * 使用AI辅助功能
+         * @param {string} type - 辅助类型
+         */
+        function useAIAssist(type) {
+            const contentTextarea = document.getElementById('chapter-content');
+            const aiAssistPanel = document.getElementById('ai-assist-panel');
+            const overlay = document.getElementById('overlay');
+            
+            // 获取当前选中的文本或光标位置
+            const selectionStart = contentTextarea.selectionStart;
+            const selectionEnd = contentTextarea.selectionEnd;
+            const selectedText = contentTextarea.value.substring(selectionStart, selectionEnd);
+            const beforeText = contentTextarea.value.substring(0, selectionStart);
+            const afterText = contentTextarea.value.substring(selectionEnd);
+            
+            // 根据辅助类型生成不同的内容
+            let generatedText = '';
+            
+            switch (type) {
+                case 'continue':
+                    generatedText = generateContinueText(beforeText);
+                    break;
+                case 'polish':
+                    generatedText = polishText(selectedText || beforeText.split('\n').pop());
+                    break;
+                case 'dialogue':
+                    generatedText = generateDialogue();
+                    break;
+                case 'description':
+                    generatedText = generateDescription();
+                    break;
+                case 'emotion':
+                    generatedText = generateEmotion();
+                    break;
+                case 'plot':
+                    generatedText = generatePlotSuggestion();
+                    break;
+                default:
+                    generatedText = '';
+            }
+            
+            // 如果有选中文本，替换选中文本；否则在光标位置插入生成的文本
+            if (selectedText) {
+                contentTextarea.value = beforeText + generatedText + afterText;
+            } else {
+                contentTextarea.value = beforeText + generatedText + afterText;
+            }
+            
+            // 更新章节数据
+            chapterData.content = contentTextarea.value;
+            
+            // 计算字数
+            const wordCount = contentTextarea.value.replace(/\s+/g, '').length;
+            chapterData.wordCount = wordCount;
+            document.getElementById('word-count').textContent = wordCount;
+            
+            // 关闭AI辅助面板
+            aiAssistPanel.classList.remove('active');
+            overlay.classList.remove('active');
+            
+            // 显示成功提示
+            showToast('AI辅助内容已插入', 'success');
+        }
+        
+        /**
+         * 生成续写文本
+         * @param {string} context - 上下文
+         * @returns {string} - 生成的文本
+         */
+        function generateContinueText(context) {
+            // 这里应该调用AI接口生成文本
+            // 简化起见，返回示例文本
+            return "\n李天阳皱了皱眉，他没想到自己的能力会引起这么多人的注意。班长王明的情感值显示出强烈的好奇和一丝警惕，这让他不得不重新考虑如何使用这个能力。\n\n"也许我应该更加谨慎一些，"他心想，"至少在弄清楚这个系统的来源之前。"";
+        }
+        
+        /**
+         * 润色文本
+         * @param {string} text - 原文本
+         * @returns {string} - 润色后的文本
+         */
+        function polishText(text) {
+            // 这里应该调用AI接口润色文本
+            // 简化起见，返回示例文本
+            if (!text) return '';
+            
+            // 简单替换一些词语，模拟润色效果
+            return text
+                .replace(/很/g, '极为')
+                .replace(/看/g, '注视')
+                .replace(/说/g, '缓缓道')
+                .replace(/走/g, '迈步')
+                .replace(/想/g, '思索');
+        }
+        
+        /**
+         * 生成对话
+         * @returns {string} - 生成的对话
+         */
+        function generateDialogue() {
+            // 这里应该调用AI接口生成对话
+            // 简化起见，返回示例对话
+            return "\n"你真的变了很多，"王明盯着李天阳说道，眼神中带着探究，"以前的你可不会主动组织讨论。"\n\n李天阳笑了笑，"人总是会成长的，不是吗？"\n\n"是啊，"王明点点头，"但你的变化也太突然了。"他的情感值显示出一丝怀疑和警惕。\n\n李天阳心中一紧，但表面上依然保持着微笑，"可能是最近读了一些心理学的书吧，对人际交往有了新的理解。"";
+        }
+        
+        /**
+         * 生成描写
+         * @returns {string} - 生成的描写
+         */
+        function generateDescription() {
+            // 这里应该调用AI接口生成描写
+            // 简化起见，返回示例描写
+            return "\n教室里的阳光透过窗户斜斜地洒在桌面上，形成一道道金色的光带。窗外的梧桐树随风轻轻摇曳，树叶发出沙沙的响声。李天阳坐在靠窗的位置，阳光照在他的侧脸上，为他增添了一丝神秘的气息。他的目光扫过教室里的每一个人，看着他们头顶上不同颜色的光晕，仿佛在阅读一本色彩斑斓的情感之书。";
+        }
+        
+        /**
+         * 生成情感表达
+         * @returns {string} - 生成的情感表达
+         */
+        function generateEmotion() {
+            // 这里应该调用AI接口生成情感表达
+            // 简化起见，返回示例情感表达
+            return "\n李天阳的心脏猛地一跳，一股寒意从脊背蔓延至全身。他从未想过自己的能力会引起别人的怀疑，更没想到王明会如此敏锐地察觉到他的变化。恐惧和不安交织在一起，像一只无形的手紧紧攥住了他的心脏。他强迫自己保持冷静，但额头上的冷汗已经悄然浮现。这个能力究竟是福是祸？他不得而知，但此刻，他只希望能够安全地度过这次危机。";
+        }
+        
+        /**
+         * 生成情节建议
+         * @returns {string} - 生成的情节建议
+         */
+        function generatePlotSuggestion() {
+            // 这里应该调用AI接口生成情节建议
+            // 简化起见，返回示例情节建议
+            return "\n/* 情节建议：可以在这里安排一个小冲突，比如李天阳发现王明的情感值中隐藏着一丝嫉妒，暗示王明可能会成为后续的对手或障碍。同时，可以引入一个神秘人物，他的头顶没有任何情感光晕，这让李天阳感到好奇和不安，为后续剧情埋下伏笔。*/";
+        }
+        
+        /**
+         * 保存章节
+         */
+        function saveChapter() {
+            // 从URL参数获取小说ID和章节索引
+            const urlParams = new URLSearchParams(window.location.search);
+            const novelId = urlParams.get('id') || '1';
+            const chapterIndex = urlParams.get('chapter') || '0';
+            
+            // 更新章节更新时间
+            chapterData.updateTime = new Date().toISOString().split('T')[0];
+            
+            // 尝试从本地存储加载小说数据
+            const savedNovel = localStorage.getItem(`novel_${novelId}`);
+            if (savedNovel) {
+                const novelData = JSON.parse(savedNovel);
+                
+                // 更新章节数据
+                novelData.chapters[chapterIndex] = chapterData;
+                
+                // 更新小说总字数
+                let totalWordCount = 0;
+                novelData.chapters.forEach(chapter => {
+                    totalWordCount += chapter.wordCount;
+                });
+                novelData.wordCount = totalWordCount;
+                
+                // 更新小说更新时间
+                novelData.updateTime = chapterData.updateTime;
+                
+                // 保存回本地存储
+                localStorage.setItem(`novel_${novelId}`, JSON.stringify(novelData));
+                
+                // 显示成功提示
+                showToast('章节保存成功', 'success');
+            } else {
+                // 显示错误提示
+                showToast('保存失败，未找到小说数据', 'error');
+            }
+        }
+    </script>
+</body>
+</html> 

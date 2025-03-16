@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的小说 - AI网文小说创作助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="common.css" rel="stylesheet">
+</head>
+<body>
+    <div class="page-container">
+        <!-- 导航栏 -->
+        <nav class="navbar">
+            <div class="container navbar-container">
+                <a href="home.html" class="navbar-brand">AI网文小说创作助手</a>
+                <div class="navbar-nav">
+                    <a href="novel-list.html" class="nav-link active">我的小说</a>
+                    <a href="genre-selection.html" class="nav-link">创作中心</a>
+                    <a href="profile.html" class="nav-link">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=80&q=80" alt="用户头像" class="avatar">
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 主要内容 -->
+        <main class="main-content">
+            <div class="container">
+                <!-- 页面标题和操作 -->
+                <div class="flex justify-between items-center mb-8">
+                    <h1 class="text-3xl font-bold">我的小说</h1>
+                    <div class="flex gap-4">
+                        <div class="relative">
+                            <input type="text" placeholder="搜索小说..." class="form-control pr-10">
+                            <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                        <div class="relative">
+                            <select class="form-control appearance-none pr-10">
+                                <option value="updated">最近更新</option>
+                                <option value="created">创建时间</option>
+                                <option value="title">标题</option>
+                                <option value="words">字数</option>
+                            </select>
+                            <div class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                        </div>
+                        <a href="genre-selection.html" class="btn btn-primary">
+                            <i class="fas fa-plus mr-2"></i> 新建小说
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 小说分类标签 -->
+                <div class="flex gap-4 mb-8 overflow-x-auto pb-2">
+                    <button class="btn btn-primary">全部</button>
+                    <button class="btn btn-secondary">连载中</button>
+                    <button class="btn btn-secondary">已完结</button>
+                    <button class="btn btn-secondary">男频</button>
+                    <button class="btn btn-secondary">女频</button>
+                    <button class="btn btn-secondary">玄幻</button>
+                    <button class="btn btn-secondary">都市</button>
+                    <button class="btn btn-secondary">仙侠</button>
+                    <button class="btn btn-secondary">言情</button>
+                    <button class="btn btn-secondary">历史</button>
+                </div>
+
+                <!-- 小说列表 -->
+                <div class="novel-list">
+                    <!-- 小说卡片 1 -->
+                    <div class="novel-card">
+                        <div class="novel-cover" style="background-image: url('https://images.unsplash.com/photo-1518826778770-a729fb53c3c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80');">
+                            <div class="novel-status">连载中</div>
+                        </div>
+                        <div class="novel-info">
+                            <h3 class="novel-title">情感读心者</h3>
+                            <div class="novel-meta">
+                                <span>都市异能</span>
+                                <span>32,456字</span>
+                                <span class="chapter-progress">8/30章</span>
+                            </div>
+                            <p class="novel-description">
+                                大学生李天阳在一次偶然的机会下获得了一个神秘的系统，可以看到他人的情感值。从此，他的生活发生了翻天覆地的变化，不仅能够轻松应对各种人际关系，还能在危机时刻洞察他人的真实想法。
+                            </p>
+                        </div>
+                        <div class="novel-footer">
+                            <div class="flex items-center text-gray-500 text-sm">
+                                <span class="mr-4"><i class="far fa-calendar-alt mr-1"></i> 2023-08-15</span>
+                                <span><i class="far fa-edit mr-1"></i> 3天前更新</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <a href="novel-view.html" class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-book-open"></i>
+                                </a>
+                                <a href="novel-edit.html" class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 小说卡片 2 -->
+                    <div class="novel-card">
+                        <div class="novel-cover" style="background-image: url('https://images.unsplash.com/photo-1511300636408-a63a89df3482?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80');">
+                            <div class="novel-status">已完结</div>
+                        </div>
+                        <div class="novel-info">
+                            <h3 class="novel-title">修真归来</h3>
+                            <div class="novel-meta">
+                                <span>都市修真</span>
+                                <span>128,765字</span>
+                                <span class="chapter-progress">30/30章</span>
+                            </div>
+                            <p class="novel-description">
+                                叶辰在修真界修炼千年，因一场大战意外跌落凡间，重回都市。且看他如何凭借强大的修为，在都市中纵横捭阖，成就一段传奇人生。
+                            </p>
+                        </div>
+                        <div class="novel-footer">
+                            <div class="flex items-center text-gray-500 text-sm">
+                                <span class="mr-4"><i class="far fa-calendar-alt mr-1"></i> 2023-07-20</span>
+                                <span><i class="far fa-edit mr-1"></i> 1个月前更新</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <a href="novel-view.html" class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-book-open"></i>
+                                </a>
+                                <a href="novel-edit.html" class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 小说卡片 3 -->
+                    <div class="novel-card">
+                        <div class="novel-cover" style="background-image: url('https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80');">
+                            <div class="novel-status">连载中</div>
+                        </div>
+                        <div class="novel-info">
+                            <h3 class="novel-title">星际猎手</h3>
+                            <div class="novel-meta">
+                                <span>科幻</span>
+                                <span>56,789字</span>
+                                <span class="chapter-progress">12/40章</span>
+                            </div>
+                            <p class="novel-description">
+                                2150年，人类已经开始星际殖民。林星是一名星际猎手，专门猎取各种稀有资源和生物。在一次任务中，他发现了一个可能改变整个宇宙格局的秘密。
+                            </p>
+                        </div>
+                        <div class="novel-footer">
+                            <div class="flex items-center text-gray-500 text-sm">
+                                <span class="mr-4"><i class="far fa-calendar-alt mr-1"></i> 2023-08-01</span>
+                                <span><i class="far fa-edit mr-1"></i> 1周前更新</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <a href="novel-view.html" class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-book-open"></i>
+                                </a>
+                                <a href="novel-edit.html" class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 小说卡片 4 -->
+                    <div class="novel-card">
+                        <div class="novel-cover" style="background-image: url('https://images.unsplash.com/photo-1579547945413-497e1b99dac0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80');">
+                            <div class="novel-status">连载中</div>
+                        </div>
+                        <div class="novel-info">
+                            <h3 class="novel-title">重生之商业帝国</h3>
+                            <div class="novel-meta">
+                                <span>都市重生</span>
+                                <span>78,234字</span>
+                                <span class="chapter-progress">15/35章</span>
+                            </div>
+                            <p class="novel-description">
+                                商业奇才张明在人生巅峰时意外身亡，重生回到大学时代。凭借前世的经验和记忆，他开始了新的创业之路，一步步打造自己的商业帝国。
+                            </p>
+                        </div>
+                        <div class="novel-footer">
+                            <div class="flex items-center text-gray-500 text-sm">
+                                <span class="mr-4"><i class="far fa-calendar-alt mr-1"></i> 2023-08-10</span>
+                                <span><i class="far fa-edit mr-1"></i> 5天前更新</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <a href="novel-view.html" class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-book-open"></i>
+                                </a>
+                                <a href="novel-edit.html" class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 小说卡片 5 -->
+                    <div class="novel-card">
+                        <div class="novel-cover" style="background-image: url('https://images.unsplash.com/photo-1551009175-15bdf9dcb580?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80');">
+                            <div class="novel-status">已完结</div>
+                        </div>
+                        <div class="novel-info">
+                            <h3 class="novel-title">穿越之宫廷争霸</h3>
+                            <div class="novel-meta">
+                                <span>古代言情</span>
+                                <span>156,789字</span>
+                                <span class="chapter-progress">25/25章</span>
+                            </div>
+                            <p class="novel-description">
+                                现代女强人苏晚意外穿越到古代，成为一个没落侯府的小姐。凭借现代知识和过人智慧，她在宫廷中步步为营，最终成为一代传奇女子。
+                            </p>
+                        </div>
+                        <div class="novel-footer">
+                            <div class="flex items-center text-gray-500 text-sm">
+                                <span class="mr-4"><i class="far fa-calendar-alt mr-1"></i> 2023-06-15</span>
+                                <span><i class="far fa-edit mr-1"></i> 2个月前更新</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <a href="novel-view.html" class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-book-open"></i>
+                                </a>
+                                <a href="novel-edit.html" class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 小说卡片 6 -->
+                    <div class="novel-card">
+                        <div class="novel-cover" style="background-image: url('https://images.unsplash.com/photo-1534447677768-be436bb09401?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80');">
+                            <div class="novel-status">连载中</div>
+                        </div>
+                        <div class="novel-info">
+                            <h3 class="novel-title">无限轮回</h3>
+                            <div class="novel-meta">
+                                <span>玄幻</span>
+                                <span>45,678字</span>
+                                <span class="chapter-progress">2/20章</span>
+                            </div>
+                            <p class="novel-description">
+                                陈风发现自己陷入了一个奇怪的轮回，每次死亡后都会回到特定的时间点重新开始。他必须找出轮回的真相，才能真正获得自由。
+                            </p>
+                        </div>
+                        <div class="novel-footer">
+                            <div class="flex items-center text-gray-500 text-sm">
+                                <span class="mr-4"><i class="far fa-calendar-alt mr-1"></i> 2023-08-18</span>
+                                <span><i class="far fa-edit mr-1"></i> 昨天更新</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <a href="novel-view.html" class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-book-open"></i>
+                                </a>
+                                <a href="novel-edit.html" class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 分页 -->
+                <div class="flex justify-center mt-8">
+                    <nav class="flex items-center gap-1">
+                        <a href="#" class="btn btn-sm btn-secondary">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                        <a href="#" class="btn btn-sm btn-primary">1</a>
+                        <a href="#" class="btn btn-sm btn-secondary">2</a>
+                        <a href="#" class="btn btn-sm btn-secondary">3</a>
+                        <span class="px-2">...</span>
+                        <a href="#" class="btn btn-sm btn-secondary">10</a>
+                        <a href="#" class="btn btn-sm btn-secondary">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </main>
+
+        <!-- 页脚 -->
+        <footer class="bg-gray-800 text-white py-6">
+            <div class="container text-center">
+                <p class="text-gray-400">© 2023 AI网文小说创作助手. 保留所有权利.</p>
+            </div>
+        </footer>
+
+        <!-- 删除确认弹窗 -->
+        <div id="delete-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+            <div class="bg-white rounded-lg p-6 max-w-md w-full">
+                <h3 class="text-xl font-bold mb-4">确认删除</h3>
+                <p class="text-gray-600 mb-6">您确定要删除这部小说吗？此操作无法撤销。</p>
+                <div class="flex justify-end gap-4">
+                    <button class="btn btn-secondary" onclick="document.getElementById('delete-modal').classList.add('hidden')">取消</button>
+                    <button class="btn btn-primary bg-red-600 hover:bg-red-700">确认删除</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="common.js"></script>
+</body>
+</html> 

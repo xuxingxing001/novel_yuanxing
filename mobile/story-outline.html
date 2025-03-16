@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>故事梗概 - AI网文小说创作助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="mobile-common.css" rel="stylesheet">
+    <style>
+        /* 滚动式步骤条样式 */
+        .steps-scroller-container {
+            position: relative;
+            overflow: hidden;
+            margin: 1rem 0;
+            padding: 0 1.5rem;
+        }
+        
+        .steps-scroller {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding: 0.5rem 0;
+        }
+        
+        .steps-scroller::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .step-item {
+            flex: 0 0 auto;
+            width: 80px;
+            scroll-snap-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 0.25rem;
+        }
+        
+        .step-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+            position: relative;
+            background-color: #e5e7eb;
+            color: #6b7280;
+        }
+        
+        .step-circle.completed {
+            background-color: #10b981;
+            color: white;
+        }
+        
+        .step-circle.active {
+            background-color: #6366f1;
+            color: white;
+        }
+        
+        .step-label {
+            font-size: 0.7rem;
+            text-align: center;
+            color: #6b7280;
+            max-width: 100%;
+            white-space: normal;
+            line-height: 1.2;
+        }
+        
+        .step-item.completed .step-label,
+        .step-item.active .step-label {
+            color: #374151;
+            font-weight: 600;
+        }
+        
+        .step-connector {
+            position: absolute;
+            top: 25px;
+            left: 50px;
+            height: 2px;
+            background-color: #e5e7eb;
+            z-index: -1;
+        }
+        
+        .step-connector.filled {
+            background-color: #10b981;
+        }
+        
+        .scroll-arrow {
+            position: absolute;
+            top: 15px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        }
+        
+        .scroll-left {
+            left: 0.5rem;
+        }
+        
+        .scroll-right {
+            right: 0.5rem;
+        }
+        
+        /* 底部按钮区域 */
+        .bottom-buttons {
+            position: fixed;
+            bottom: 60px;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background-color: white;
+            border-top: 1px solid #e2e8f0;
+            z-index: 10;
+            /* 适配iPhone底部安全区域 */
+            padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0));
+        }
+        
+        @media (min-width: 768px) {
+            .bottom-buttons {
+                width: 370px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-bottom-left-radius: 34px;
+                border-bottom-right-radius: 34px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="status-bar-left">
+                <span class="status-bar-time">9:41</span>
+            </div>
+            <div class="status-bar-right">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi ml-2"></i>
+                <i class="fas fa-battery-full ml-2 status-bar-battery"></i>
+            </div>
+        </div>
+        
+        <!-- 导航栏 -->
+        <div class="nav-bar">
+            <div class="nav-left">
+                <a href="genre-selection.html">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </div>
+            <div class="nav-title">故事梗概</div>
+            <div class="nav-right"></div>
+        </div>
+        
+        <!-- 内容区域 -->
+        <div class="content">
+            <!-- 滚动式步骤条 -->
+            <div class="steps-scroller-container">
+                <button class="scroll-arrow scroll-left hidden" id="scroll-left">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                
+                <div class="steps-scroller" id="steps-scroller">
+                    <div class="step-item completed">
+                        <div class="step-circle completed">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="step-label">选择流派</div>
+                    </div>
+                    
+                    <div class="step-connector filled" style="width: 80px;"></div>
+                    
+                    <div class="step-item active">
+                        <div class="step-circle active">
+                            <span>2</span>
+                        </div>
+                        <div class="step-label">输入梗概</div>
+                    </div>
+                    
+                    <div class="step-connector" style="width: 80px;"></div>
+                    
+                    <div class="step-item">
+                        <div class="step-circle">
+                            <span>3</span>
+                        </div>
+                        <div class="step-label">故事要素</div>
+                    </div>
+                    
+                    <div class="step-connector" style="width: 80px;"></div>
+                    
+                    <div class="step-item">
+                        <div class="step-circle">
+                            <span>4</span>
+                        </div>
+                        <div class="step-label">章节大纲</div>
+                    </div>
+                    
+                    <div class="step-connector" style="width: 80px;"></div>
+                    
+                    <div class="step-item">
+                        <div class="step-circle">
+                            <span>5</span>
+                        </div>
+                        <div class="step-label">章节细纲</div>
+                    </div>
+                    
+                    <div class="step-connector" style="width: 80px;"></div>
+                    
+                    <div class="step-item">
+                        <div class="step-circle">
+                            <span>6</span>
+                        </div>
+                        <div class="step-label">生成正文</div>
+                    </div>
+                </div>
+                
+                <button class="scroll-arrow scroll-right" id="scroll-right">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            
+            <!-- 当前选择的流派 -->
+            <div class="card mb-4">
+                <div class="p-4">
+                    <div class="flex items-center">
+                        <span class="badge badge-primary mr-2">男频</span>
+                        <span class="font-bold">都市-异能流</span>
+                        <a href="genre-selection.html" class="ml-2 text-primary">
+                            <i class="fas fa-edit text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 梗概输入区域 -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2 class="card-title">故事梗概</h2>
+                    <div class="text-sm text-secondary">
+                        已输入 <span id="word-counter" class="font-bold">0</span> 字
+                    </div>
+                </div>
+                <div class="card-body">
+                    <textarea id="story-outline" class="form-control" rows="8" placeholder="请输入您的故事梗概，例如：主角李天阳原本是一名普通大学生，在一次偶然的机会下获得了一个神秘的系统，可以看到他人的情感值。从此，他的生活发生了翻天覆地的变化，不仅能够轻松应对各种人际关系，还能在危机时刻洞察他人的真实想法..." data-word-count="word-counter" data-max-length="500"></textarea>
+                    <div class="flex justify-end mt-4">
+                        <button id="expand-button" class="btn btn-secondary" onclick="expandOutline()">
+                            <i class="fas fa-magic mr-2"></i> 智能扩写
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 梗概示例 -->
+            <div class="mb-4">
+                <div class="flex items-center mb-3">
+                    <h2 class="text-lg font-bold">梗概示例</h2>
+                    <div class="ml-2 text-xs text-secondary">
+                        <i class="fas fa-info-circle mr-1"></i> 点击示例可直接使用
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <div class="card p-4 cursor-pointer" onclick="useExample(this)">
+                        <h3 class="font-bold mb-1">情感读心者</h3>
+                        <p class="text-sm text-secondary">大学生李天阳在一次偶然的机会下获得了一个神秘的系统，可以看到他人的情感值。从此，他的生活发生了翻天覆地的变化，不仅能够轻松应对各种人际关系，还能在危机时刻洞察他人的真实想法。在都市中游刃有余的同时，他逐渐发现这个系统背后隐藏着更大的秘密...</p>
+                    </div>
+                    <div class="card p-4 cursor-pointer" onclick="useExample(this)">
+                        <h3 class="font-bold mb-1">超能商业大亨</h3>
+                        <p class="text-sm text-secondary">张明是一名普通的销售员，在一次意外中获得了读取他人思想的能力。他利用这一能力在商业谈判中屡战屡胜，迅速崛起成为商业奇才。然而，随着他的能力越来越强，他发现自己卷入了一个庞大的阴谋，一个神秘组织正在寻找和他一样拥有特殊能力的人...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 操作按钮 -->
+            <div class="bottom-buttons">
+                <div class="flex justify-between">
+                    <button class="btn btn-outline w-5/12" onclick="window.location.href='genre-selection.html'">
+                        <i class="fas fa-arrow-left mr-2"></i> 上一步
+                    </button>
+                    <button id="next-button" class="btn btn-primary w-5/12" onclick="goToNextStep()">
+                        下一步 <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部标签栏 -->
+        <div class="tab-bar">
+            <a href="home.html" class="tab-item" data-tab="home">
+                <i class="fas fa-home tab-icon"></i>
+                <span>首页</span>
+            </a>
+            <a href="novel-list.html" class="tab-item" data-tab="novels">
+                <i class="fas fa-book tab-icon"></i>
+                <span>我的小说</span>
+            </a>
+            <a href="create.html" class="tab-item active" data-tab="create">
+                <i class="fas fa-plus-circle tab-icon"></i>
+                <span>创作</span>
+            </a>
+            <a href="inspiration.html" class="tab-item" data-tab="inspiration">
+                <i class="fas fa-lightbulb tab-icon"></i>
+                <span>灵感</span>
+            </a>
+            <a href="profile.html" class="tab-item" data-tab="profile">
+                <i class="fas fa-user tab-icon"></i>
+                <span>我的</span>
+            </a>
+        </div>
+    </div>
+    
+    <script src="mobile-common.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const scroller = document.getElementById('steps-scroller');
+            const scrollLeftBtn = document.getElementById('scroll-left');
+            const scrollRightBtn = document.getElementById('scroll-right');
+            const activeStep = document.querySelector('.step-item.active');
+            
+            // 初始滚动到活动步骤
+            if (activeStep) {
+                setTimeout(() => {
+                    activeStep.scrollIntoView({
+                        behavior: 'smooth',
+                        inline: 'center',
+                        block: 'nearest'
+                    });
+                }, 300);
+            }
+            
+            // 左右滚动按钮
+            scrollLeftBtn.addEventListener('click', function() {
+                scroller.scrollBy({
+                    left: -120,
+                    behavior: 'smooth'
+                });
+            });
+            
+            scrollRightBtn.addEventListener('click', function() {
+                scroller.scrollBy({
+                    left: 120,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // 监听滚动事件，控制箭头显示
+            scroller.addEventListener('scroll', function() {
+                // 显示/隐藏左箭头
+                if (scroller.scrollLeft > 20) {
+                    scrollLeftBtn.classList.remove('hidden');
+                } else {
+                    scrollLeftBtn.classList.add('hidden');
+                }
+                
+                // 显示/隐藏右箭头
+                if (scroller.scrollLeft + scroller.clientWidth >= scroller.scrollWidth - 20) {
+                    scrollRightBtn.classList.add('hidden');
+                } else {
+                    scrollRightBtn.classList.remove('hidden');
+                }
+            });
+            
+            // 初始触发一次滚动事件来设置箭头状态
+            scroller.dispatchEvent(new Event('scroll'));
+            
+            // 使用示例
+            function useExample(element) {
+                const exampleText = element.querySelector('p').textContent;
+                const outlineInput = document.getElementById('story-outline');
+                const wordCounter = document.getElementById('word-counter');
+                
+                outlineInput.value = exampleText;
+                countWords(outlineInput, wordCounter, 500);
+            }
+            
+            // 扩写梗概
+            function expandOutline() {
+                const outlineInput = document.getElementById('story-outline');
+                const expandButton = document.getElementById('expand-button');
+                
+                if (!outlineInput || !expandButton) return;
+                
+                simulateLoading(expandButton, () => {
+                    // 模拟AI扩写结果
+                    const originalText = outlineInput.value;
+                    if (originalText.trim() === '') {
+                        outlineInput.value = '主角李天阳原本是一名普通大学生，在一次偶然的机会下获得了一个神秘的系统，可以看到他人的情感值。从此，他的生活发生了翻天覆地的变化，不仅能够轻松应对各种人际关系，还能在危机时刻洞察他人的真实想法。在都市中游刃有余的同时，他逐渐发现这个系统背后隐藏着更大的秘密...';
+                    } else {
+                        // 扩写原有内容
+                        if (originalText.length < 200) {
+                            outlineInput.value = originalText + '\n\n' + '随着能力的不断提升，主角逐渐发现自己并非偶然获得这种能力，背后似乎有一个庞大的组织在暗中观察着他。与此同时，他也遇到了其他拥有特殊能力的人，有敌有友。在这个看似平凡的都市中，一场关乎超能力者命运的较量正在悄然展开...';
+                        }
+                    }
+                    
+                    // 更新字数统计
+                    const wordCounter = document.getElementById('word-counter');
+                    countWords(outlineInput, wordCounter, 500);
+                    
+                    // 显示成功提示
+                    showToast('梗概扩写成功', 'success');
+                });
+            }
+            
+            // 前往下一步
+            function goToNextStep() {
+                const outlineInput = document.getElementById('story-outline');
+                
+                if (!outlineInput.value.trim()) {
+                    showToast('请输入故事梗概', 'warning');
+                    return;
+                }
+                
+                // 保存梗概
+                localStorage.setItem('storyOutline', outlineInput.value);
+                
+                // 跳转到下一步
+                window.location.href = 'inspiration.html';
+            }
+            
+            // 恢复已保存的梗概
+            const savedOutline = localStorage.getItem('storyOutline');
+            const outlineInput = document.getElementById('story-outline');
+            const wordCounter = document.getElementById('word-counter');
+            
+            if (savedOutline && outlineInput) {
+                outlineInput.value = savedOutline;
+                countWords(outlineInput, wordCounter, 500);
+            }
+        });
+    </script>
+</body>
+</html> 

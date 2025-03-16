@@ -1,0 +1,12 @@
+---
+description: 
+globs: 
+---
+
+# Your rule content
+
+- You can @ files here
+- You can use markdown but dont have to
+
+- 每个文件行数不得超过300行
+- 大文件可以拆分成多个小文件共同完成目标

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>流派测试页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .genre-container {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .genre-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .genre-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .genre-item {
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+        }
+        .genre-name {
+            font-weight: bold;
+        }
+        .genre-description {
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>流派测试页面</h1>
+        
+        <h2>男频流派</h2>
+        
+        <!-- 都市 -->
+        <div class="genre-container">
+            <div class="genre-title">都市</div>
+            <div id="male-urban" class="genre-list"></div>
+        </div>
+        
+        <!-- 玄幻 -->
+        <div class="genre-container">
+            <div class="genre-title">玄幻</div>
+            <div id="male-fantasy" class="genre-list"></div>
+        </div>
+        
+        <!-- 仙侠 -->
+        <div class="genre-container">
+            <div class="genre-title">仙侠</div>
+            <div id="male-xianxia" class="genre-list"></div>
+        </div>
+        
+        <!-- 科幻 -->
+        <div class="genre-container">
+            <div class="genre-title">科幻</div>
+            <div id="male-scifi" class="genre-list"></div>
+        </div>
+        
+        <!-- 历史 -->
+        <div class="genre-container">
+            <div class="genre-title">历史</div>
+            <div id="male-history" class="genre-list"></div>
+        </div>
+        
+        <!-- 游戏 -->
+        <div class="genre-container">
+            <div class="genre-title">游戏</div>
+            <div id="male-game" class="genre-list"></div>
+        </div>
+        
+        <!-- 未来 -->
+        <div class="genre-container">
+            <div class="genre-title">未来</div>
+            <div id="male-future" class="genre-list"></div>
+        </div>
+        
+        <h2>女频流派</h2>
+        
+        <!-- 都市 -->
+        <div class="genre-container">
+            <div class="genre-title">都市</div>
+            <div id="female-urban" class="genre-list"></div>
+        </div>
+        
+        <!-- 古代 -->
+        <div class="genre-container">
+            <div class="genre-title">古代</div>
+            <div id="female-ancient" class="genre-list"></div>
+        </div>
+        
+        <!-- 玄幻 -->
+        <div class="genre-container">
+            <div class="genre-title">玄幻</div>
+            <div id="female-fantasy" class="genre-list"></div>
+        </div>
+        
+        <!-- 幻想 -->
+        <div class="genre-container">
+            <div class="genre-title">幻想</div>
+            <div id="female-fantasy_world" class="genre-list"></div>
+        </div>
+        
+        <!-- 现代言情 -->
+        <div class="genre-container">
+            <div class="genre-title">现代言情</div>
+            <div id="female-modern_romance" class="genre-list"></div>
+        </div>
+        
+        <!-- 悬疑推理 -->
+        <div class="genre-container">
+            <div class="genre-title">悬疑推理</div>
+            <div id="female-mystery" class="genre-list"></div>
+        </div>
+    </div>
+    
+    <script src="consolidated-genres.js"></script>
+    <script>
+        // 渲染流派数据
+        function renderGenres() {
+            // 渲染男频流派
+            renderGenreCategory('male', 'urban');
+            renderGenreCategory('male', 'fantasy');
+            renderGenreCategory('male', 'xianxia');
+            renderGenreCategory('male', 'scifi');
+            renderGenreCategory('male', 'history');
+            renderGenreCategory('male', 'game');
+            renderGenreCategory('male', 'future');
+            
+            // 渲染女频流派
+            renderGenreCategory('female', 'urban');
+            renderGenreCategory('female', 'ancient');
+            renderGenreCategory('female', 'fantasy');
+            renderGenreCategory('female', 'fantasy_world');
+            renderGenreCategory('female', 'modern_romance');
+            renderGenreCategory('female', 'mystery');
+        }
+        
+        // 渲染单个流派类别
+        function renderGenreCategory(channel, category) {
+            const container = document.getElementById(`${channel}-${category}`);
+            if (!container) return;
+            
+            const genres = channel === 'male' ? maleGenres[category] : femaleGenres[category];
+            if (!genres) {
+                container.innerHTML = '<div>未找到数据</div>';
+                return;
+            }
+            
+            let html = '';
+            genres.forEach(genre => {
+                html += `
+                    <div class="genre-item">
+                        <div class="genre-name">${genre.name}</div>
+                        <div class="genre-description">${genre.description}</div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        // 页面加载完成后渲染流派数据
+        document.addEventListener('DOMContentLoaded', renderGenres);
+    </script>
+</body>
+</html> 
