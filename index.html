@@ -25,7 +25,6 @@
             overflow: hidden;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             background-color: white;
-            height: 800px;
         }
         .prototype-title {
             padding: 10px 15px;
@@ -38,8 +37,8 @@
         }
         iframe {
             width: 100%;
-            height: 100%;
             border: none;
+            height: 2000px; /* 设置一个更大的默认高度 */
         }
         .header {
             text-align: center;
@@ -76,6 +75,50 @@
             transform: translateY(-5px);
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
         }
+        .page-nav {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            z-index: 100;
+        }
+        .page-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .page-nav li {
+            margin-bottom: 8px;
+        }
+        .page-nav a {
+            display: block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: #4f46e5;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .page-nav a:hover {
+            background-color: #f3f4f6;
+        }
+        .page-nav a.active {
+            background-color: #4f46e5;
+            color: white;
+        }
+        /* 为不同页面设置特定高度 */
+        #home-frame { height: 1200px; }
+        #novel-list-frame { height: 1500px; }
+        #genre-selection-frame { height: 1800px; }
+        #story-outline-frame { height: 2200px; }
+        #inspiration-frame { height: 3000px; }
+        #chapter-outline-frame { height: 2500px; }
+        #detailed-outline-frame { height: 2800px; }
+        #content-generation-frame { height: 3200px; }
+        #profile-frame { height: 1500px; }
     </style>
 </head>
 <body>
@@ -84,9 +127,23 @@
         <p>基于现代Web技术的高保真原型</p>
     </div>
     
+    <div class="page-nav">
+        <ul>
+            <li><a href="#home">首页</a></li>
+            <li><a href="#novel-list">我的小说</a></li>
+            <li><a href="#genre-selection">流派选择</a></li>
+            <li><a href="#story-outline">故事梗概</a></li>
+            <li><a href="#inspiration">故事要素</a></li>
+            <li><a href="#chapter-outline">章节大纲</a></li>
+            <li><a href="#detailed-outline">章节细纲</a></li>
+            <li><a href="#content-generation">内容生成</a></li>
+            <li><a href="#profile">个人中心</a></li>
+        </ul>
+    </div>
+    
     <div class="prototype-container" id="prototype-container">
         <!-- 首页 -->
-        <div class="prototype-item">
+        <div class="prototype-item" id="home">
             <div class="prototype-title">
                 <span>首页</span>
                 <a href="pages/home.html" target="_blank" class="text-white hover:text-gray-200">
@@ -94,12 +151,12 @@
                 </a>
             </div>
             <div class="prototype-frame">
-                <iframe src="pages/home.html"></iframe>
+                <iframe id="home-frame" src="pages/home.html" scrolling="no"></iframe>
             </div>
         </div>
         
         <!-- 小说列表 -->
-        <div class="prototype-item">
+        <div class="prototype-item" id="novel-list">
             <div class="prototype-title">
                 <span>我的小说</span>
                 <a href="pages/novel-list.html" target="_blank" class="text-white hover:text-gray-200">
@@ -107,12 +164,12 @@
                 </a>
             </div>
             <div class="prototype-frame">
-                <iframe src="pages/novel-list.html"></iframe>
+                <iframe id="novel-list-frame" src="pages/novel-list.html" scrolling="no"></iframe>
             </div>
         </div>
         
         <!-- 流派选择 -->
-        <div class="prototype-item">
+        <div class="prototype-item" id="genre-selection">
             <div class="prototype-title">
                 <span>流派选择</span>
                 <a href="pages/genre-selection.html" target="_blank" class="text-white hover:text-gray-200">
@@ -120,12 +177,12 @@
                 </a>
             </div>
             <div class="prototype-frame">
-                <iframe src="pages/genre-selection.html"></iframe>
+                <iframe id="genre-selection-frame" src="pages/genre-selection.html" scrolling="no"></iframe>
             </div>
         </div>
         
         <!-- 故事梗概 -->
-        <div class="prototype-item">
+        <div class="prototype-item" id="story-outline">
             <div class="prototype-title">
                 <span>故事梗概</span>
                 <a href="pages/story-outline.html" target="_blank" class="text-white hover:text-gray-200">
@@ -133,12 +190,12 @@
                 </a>
             </div>
             <div class="prototype-frame">
-                <iframe src="pages/story-outline.html"></iframe>
+                <iframe id="story-outline-frame" src="pages/story-outline.html" scrolling="no"></iframe>
             </div>
         </div>
         
         <!-- 故事要素 -->
-        <div class="prototype-item">
+        <div class="prototype-item" id="inspiration">
             <div class="prototype-title">
                 <span>故事要素</span>
                 <a href="pages/inspiration-generation.html" target="_blank" class="text-white hover:text-gray-200">
@@ -146,12 +203,12 @@
                 </a>
             </div>
             <div class="prototype-frame">
-                <iframe src="pages/inspiration-generation.html"></iframe>
+                <iframe id="inspiration-frame" src="pages/inspiration-generation.html" scrolling="no"></iframe>
             </div>
         </div>
         
         <!-- 章节大纲 -->
-        <div class="prototype-item">
+        <div class="prototype-item" id="chapter-outline">
             <div class="prototype-title">
                 <span>章节大纲</span>
                 <a href="pages/chapter-outline.html" target="_blank" class="text-white hover:text-gray-200">
@@ -159,12 +216,12 @@
                 </a>
             </div>
             <div class="prototype-frame">
-                <iframe src="pages/chapter-outline.html"></iframe>
+                <iframe id="chapter-outline-frame" src="pages/chapter-outline.html" scrolling="no"></iframe>
             </div>
         </div>
         
         <!-- 章节细纲 -->
-        <div class="prototype-item">
+        <div class="prototype-item" id="detailed-outline">
             <div class="prototype-title">
                 <span>章节细纲</span>
                 <a href="pages/detailed-outline.html" target="_blank" class="text-white hover:text-gray-200">
@@ -172,12 +229,12 @@
                 </a>
             </div>
             <div class="prototype-frame">
-                <iframe src="pages/detailed-outline.html"></iframe>
+                <iframe id="detailed-outline-frame" src="pages/detailed-outline.html" scrolling="no"></iframe>
             </div>
         </div>
         
         <!-- 内容生成 -->
-        <div class="prototype-item">
+        <div class="prototype-item" id="content-generation">
             <div class="prototype-title">
                 <span>内容生成</span>
                 <a href="pages/content-generation.html" target="_blank" class="text-white hover:text-gray-200">
@@ -185,12 +242,12 @@
                 </a>
             </div>
             <div class="prototype-frame">
-                <iframe src="pages/content-generation.html"></iframe>
+                <iframe id="content-generation-frame" src="pages/content-generation.html" scrolling="no"></iframe>
             </div>
         </div>
         
         <!-- 个人中心 -->
-        <div class="prototype-item">
+        <div class="prototype-item" id="profile">
             <div class="prototype-title">
                 <span>个人中心</span>
                 <a href="pages/profile.html" target="_blank" class="text-white hover:text-gray-200">
@@ -198,7 +255,7 @@
                 </a>
             </div>
             <div class="prototype-frame">
-                <iframe src="pages/profile.html"></iframe>
+                <iframe id="profile-frame" src="pages/profile.html" scrolling="no"></iframe>
             </div>
         </div>
     </div>
@@ -230,6 +287,34 @@
             
             // 初始隐藏回到顶部按钮
             backToTopBtn.style.display = 'none';
+            
+            // 页面导航高亮
+            const navLinks = document.querySelectorAll('.page-nav a');
+            const sections = document.querySelectorAll('.prototype-item');
+            
+            function highlightNav() {
+                let scrollPosition = window.scrollY;
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.offsetHeight;
+                    const sectionId = section.getAttribute('id');
+                    
+                    if (scrollPosition >= sectionTop - 100 && scrollPosition < sectionTop + sectionHeight - 100) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === '#' + sectionId) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', highlightNav);
+            
+            // 初始化页面导航高亮
+            highlightNav();
         });
     </script>
 </body>
